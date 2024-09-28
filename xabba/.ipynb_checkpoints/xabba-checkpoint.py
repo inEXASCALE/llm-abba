@@ -13,7 +13,7 @@ import multiprocessing as mp
 import pandas, collections
 from sklearn.cluster import KMeans
 from .fkmns import sampledKMeansInter
-from pychop import quant
+from .quant import quant
 from joblib import parallel_backend
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
