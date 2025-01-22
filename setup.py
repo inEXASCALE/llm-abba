@@ -17,6 +17,24 @@ log = logging.getLogger(__file__)
 ext_errors = (CCompilerError, DistutilsExecError, DistutilsPlatformError, IOError, SystemExit)
 
 
+def get_version(fname):
+    version = '0.0.1'
+    package = 'llm-abba'
+
+    with open(fname) as f:
+        for line in f:
+            if line.startswith("__version__ = '"):
+                version = line.split("'")[1]
+
+            elif line.startswith("__name__ = '"):
+                package = line.split("'")[1]
+        
+    return version, package
+    # raise RuntimeError('Error in parsing version string.')
+
+
+__version__, __package__  = get_version('llm-abba/__init__.py')
+
 class CustomBuildExtCommand(build_ext):
     """build_ext command for use when numpy headers are needed."""
 
@@ -26,17 +44,17 @@ class CustomBuildExtCommand(build_ext):
         build_ext.run(self)
         
         
-setup_args = {'name':"xabba",
-        'packages':setuptools.find_packages(),
-        'version':"0.0.1",
+setup_args = {'name':__package__,
+        'packages': setuptools.find_packages(),
+        'version': __version__,
         'cmdclass': {'build_ext': CustomBuildExtCommand},
         'install_requires':["numpy>=1.3.0", "scipy>=0.7.0", 
                             "requests", "pandas", 
                             "scikit-learn", "pychop", "cython>=0.27",
                             "joblib>=1.1.1",
                             "matplotlib"],
-        'packages':{"xabba"},
-        'package_data':{"xabba": ["xabba"]},
+        'packages':{__package__},
+        'package_data':{__package__: [__package__]},
         'long_description':long_description,
         'author':"NA",
         'author_email':"noname@email.com",
@@ -49,21 +67,21 @@ setup_args = {'name':"xabba",
                     "Operating System :: Unix",
                     "Programming Language :: Python :: 3"
                     ],
-        'description':"",
+        'description':"LLM-ABBA: mining time series via symbolic approximation",
         'long_description_content_type':'text/x-rst',
-        'url':"https://github.com/NA",
+        'url':"https://github.com/inEXASCALE/llm-abba",
         'license':'BSD 3-Clause'
     }
 
 
 comp = Extension('xabba.comp',
-                        sources=['xabba/comp.pyx'])
+                        sources=[__package__+'/comp.pyx'])
 
 agg = Extension('xabba.agg',
-                        sources=['xabba/agg.pyx'])
+                        sources=[__package__+'/agg.pyx'])
 
 inverse= Extension('xabba.inverse',
-                        sources=['xabba/inverse.pyx'])
+                        sources=[__package__+'/inverse.pyx'])
 
 
 try:
