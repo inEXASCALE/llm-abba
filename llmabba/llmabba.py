@@ -26,17 +26,7 @@ class LLMABBA:
                        abba_verbose = 0, 
                        lora_r = 16,
                        lora_alpha = 16,  
-                       target_modules = [
-                            "q_proj",
-                            "k_proj",
-                            "v_proj",
-                            "o_proj",
-                            "gate_proj",
-                            "up_proj",
-                            "down_proj",
-                            "lm_head",
-                        ],
-
+                       target_modules = None,
                         modules_to_save = ["embed_tokens"],
                         lora_dropout = 0.05
         ):  
@@ -51,7 +41,19 @@ class LLMABBA:
         self.abba_verbose = abba_verbose
         self.lora_r = lora_r 
         self.lora_alpha = lora_alpha
-        self.target_modules = target_modules
+        if target_modules is not None:
+            self.target_modules = target_modules
+        else:
+            self.target_modules = [
+                            "q_proj",
+                            "k_proj",
+                            "v_proj",
+                            "o_proj",
+                            "gate_proj",
+                            "up_proj",
+                            "down_proj",
+                            "lm_head",
+                        ]
 
         self.modules_to_save = modules_to_save
         self.lora_dropout = lora_dropout
@@ -276,7 +278,6 @@ class LLMABBA:
                 'val': Dataset.from_dict({'text_outputs': val_target_symbolic, 'text_inputs': val_data_symbolic}),
             })
 
-            from sklearn.metrics import mean_squared_error, mean_absolute_error
 
             train_length = 1
 
@@ -299,9 +300,6 @@ class LLMABBA:
                 Y_true_all[i_reconst, :] = Y_true
                 Y_recons_all[i_reconst, :] = Y_recons
 
-            print(mean_squared_error(Y_true_all, Y_recons_all))
-            print(mean_absolute_error(Y_true_all, Y_recons_all))
-            
             
         else:
             print("No data here!")
