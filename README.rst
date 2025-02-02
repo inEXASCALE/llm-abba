@@ -67,4 +67,4 @@ For questions or feedback, please reach out via GitHub issues or contact the aut
 
 References
 -----------
-[1]Carson, E., Chen, X., and Kang, C., “LLM-ABBA: Understanding time series via symbolic approximation”, <i>arXiv e-prints</i>, Art. no. arXiv:2411.18506, 2024. doi:10.48550/arXiv.2411.18506.
+[1]Carson, E., Chen, X., and Kang, C., “LLM-ABBA: Understanding time series via symbolic approximation”, arXiv e-prints, arXiv:2411.18506, 2024. doi:10.48550/arXiv.2411.18506.

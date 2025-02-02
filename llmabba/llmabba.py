@@ -1,4 +1,5 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
+from sklearn.utils.class_weight import compute_class_weight
 from sklearn import preprocessing
 from sklearn.preprocessing import StandardScaler
 import numpy as np
@@ -77,7 +78,7 @@ class LLMABBA:
                         y_data[seg_num] = 1
                     seg_num += 1
 
-                from sklearn.utils.class_weight import compute_class_weight
+                
                 label_weights = compute_class_weight(class_weight="balanced", classes=np.unique(y_data), y=y_data)
 
                 
@@ -265,7 +266,6 @@ class LLMABBA:
             val_data_symbolic = [train_data_symbolic[index] for index in arranged_seq]
             val_target_symbolic = [train_target_symbolic[index] for index in arranged_seq]
 
-
             data_TS = DatasetDict({
                 'train': Dataset.from_dict({'text_outputs': train_target_symbolic, 'text_inputs': train_data_symbolic}),
                 'val': Dataset.from_dict({'text_outputs': val_target_symbolic, 'text_inputs': val_data_symbolic}),
@@ -375,7 +375,10 @@ class LLMABBA:
         ft_model = PeftModel.from_pretrained(model, output_dir + "/" + peft_file[0])
 
 
+    def train(self):
+        pass
 
-        # ft_model = PeftModel.from_pretrained(model, 'llama2-7B-ts-finetune-ETTh1-r16-Pre168-Post168' + "/" + peft_file[0])
 
-            
+
+    def inference(self):
+        pass
