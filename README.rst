@@ -1,7 +1,7 @@
 LLM-ABBA
 ========
 
-LLM-ABBA is an advanced software framework designed for symbolic time series approximation using Large Language Models (LLMs), as introduced in the paper:
+LLM-ABBA is an software framework designed for performing time series application using Large Language Models (LLMs) based on symbolic representation, as introduced in the paper:
 `LLM-ABBA: Symbolic Time Series Approximation using Large Language Models <https://arxiv.org/abs/2411.18506>`_.
 
 Time series analysis often involves identifying patterns, trends, and structures within sequences of data points. Traditional methods, such as discrete wavelet transforms or symbolic aggregate approximation (SAX), have demonstrated success in converting continuous time series into symbolic representations, facilitating better analysis and compression. However, these methods are often limited in their ability to capture complex and subtle patterns.
