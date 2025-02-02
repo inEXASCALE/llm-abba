@@ -30,7 +30,6 @@ class LLMABBA:
                         lora_dropout = 0.05
         ):  
 
-
         self.abba_tol = abba_tol
         self.abba_init = abba_init
         self.abba_alpha = abba_alpha
@@ -57,9 +56,6 @@ class LLMABBA:
         self.modules_to_save = modules_to_save
         self.lora_dropout = lora_dropout
 
-
-
-
     def process(self, data, task, seg_length=16, 
                 seq_len_pre = 168, scalar="z-score",
                 seq_len_post = 168, data_name="ETTh1", inference_mode=False):
@@ -81,10 +77,12 @@ class LLMABBA:
         features = []
         target = []
 
+        self.parameters = 
         if inference_mode:
             return features
         else:
             return features, target
+        
 
     def build(self, max_len=512, batch_size=4):
         """Define models with user-defined parameters"""
@@ -102,8 +100,6 @@ class LLMABBA:
         vocab_list = list(mistral_vocab.keys())
 
         self.model = self.model("")
-
-
 
     def model(self, model_name, max_len):
        """Model selection with parameters"""
@@ -153,3 +149,12 @@ class LLMABBA:
         processed_data = self.process(data, inference_mode=True)
 
         return self.mode(processed_data)
+    
+
+
+    def save_model(self):
+        pass
+
+
+    def load_model(self):
+        pass
