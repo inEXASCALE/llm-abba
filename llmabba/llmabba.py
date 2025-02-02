@@ -58,7 +58,7 @@ class LLMABBA:
 
     def process(self, data, task, seg_length=16, 
                 seq_len_pre = 168, scalar="z-score",
-                seq_len_post = 168, data_name="ETTh1", inference_mode=False):
+                seq_len_post = 168, data_name="ETTh1", inference_mode=False)-> (features, targets):
         """Load data and process data"""
         if scalar == "min-max":
             self.scaler = preprocessing.MinMaxScaler(feature_range=(0, 1))
@@ -75,16 +75,16 @@ class LLMABBA:
             raise NotImplementedError("Method is not implemented, please contact the maintenance team.")
             
         features = []
-        target = []
+        targets = []
 
         self.parameters = 
         if inference_mode:
-            return features
+            return features, None
         else:
-            return features, target
+            return features, targets
         
 
-    def build(self, max_len=512, batch_size=4):
+    def build(self, max_len=512, batch_size=4) -> None:
         """Define models with user-defined parameters"""
         model_tokenizer = AutoTokenizer.from_pretrained(
                         model_name,
@@ -145,9 +145,9 @@ class LLMABBA:
 
     def inference(self, data):
         """Inference """
-        processed_data = self.process(data, inference_mode=True)
+        (processed_data, _) = self.process(data, inference_mode=True)
 
-        return self.mode(processed_data)
+        return self.model(processed_data)
     
 
 
