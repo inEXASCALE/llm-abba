@@ -63,13 +63,11 @@ class LLMABBA:
     def process(self, data, task, seg_length=16, 
                 seq_len_pre = 168, scalar="z-score",
                 seq_len_post = 168, data_name="ETTh1"):
-
+        """Load data and process data"""
         if scalar == "min-max":
             self.scaler = preprocessing.MinMaxScaler(feature_range=(0, 1))
         elif scalar == "z-score":
             self.scaler =  preprocessing.StandardScaler()
-
-
 
         if task == "classification":
             pass 
@@ -80,10 +78,13 @@ class LLMABBA:
         else:
             raise NotImplementedError("Method is not implemented, please contact the maintenance team.")
             
+        self.features = []
+        self.target = []
+
 
 
     def build(self, max_len=512, batch_size=4):
-        ## Loading Alphabet Set:  you can set vocab_list = pretrained tokens or nothing
+        """Define models with user-defined parameters"""
         model_tokenizer = AutoTokenizer.from_pretrained(
                         model_name,
                         model_max_len=max_len,
@@ -94,15 +95,15 @@ class LLMABBA:
 
         model_tokenizer.padding_side = 'right'
         model_tokenizer.pad_token = model_tokenizer.eos_token
-        print(len(model_tokenizer))
-
         mistral_vocab = model_tokenizer.get_vocab()
         vocab_list = list(mistral_vocab.keys())
+
+        self.model = self.model("")
 
 
 
     def model(self, model_name, max_len):
-       
+       """Model selection with parameters"""
         bnb_config = BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_use_double_quant=True,
