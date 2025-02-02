@@ -33,7 +33,7 @@ def get_version(fname):
     # raise RuntimeError('Error in parsing version string.')
 
 
-__version__, __package__  = get_version('llm-abba/__init__.py')
+__version__, __package__  = get_version('llmabba/__init__.py')
 
 class CustomBuildExtCommand(build_ext):
     """build_ext command for use when numpy headers are needed."""
@@ -48,17 +48,26 @@ setup_args = {'name':__package__,
         'packages': setuptools.find_packages(),
         'version': __version__,
         'cmdclass': {'build_ext': CustomBuildExtCommand},
-        'install_requires':["numpy>=1.3.0", "scipy>=0.7.0", 
-                            "requests", "pandas", 
-                            "scikit-learn", "pychop", "cython>=0.27",
-                            "joblib>=1.1.1",
+        'setup_requires':["cython", "numpy>=1.17.3"],
+        'install_requires':["numpy>=1.3.0", 
+                            "scipy>=0.7.0", 
+                            "requests",
+                            "pandas", 
+                            "scikit-learn", 
+                            "pychop", 
+                            "cython>=0.27",
+                            "joblib>=1.1.1", 
+                            "transformers", 
+                            "peft",
                             "matplotlib"],
+
         'packages':{__package__},
         'package_data':{__package__: [__package__]},
         'long_description':long_description,
         'author':"NA",
-        'author_email':"noname@email.com",
-        'classifiers':["Intended Audience :: Science/Research",
+        'author_email':"xinyechenai@email.com",
+        'classifiers':[
+                    "Intended Audience :: Science/Research",
                     "Intended Audience :: Developers",
                     "Programming Language :: Python",
                     "Topic :: Software Development",
@@ -67,20 +76,20 @@ setup_args = {'name':__package__,
                     "Operating System :: Unix",
                     "Programming Language :: Python :: 3"
                     ],
-        'description':"LLM-ABBA: mining time series via symbolic approximation",
+        'description':"LLM-ABBA: mining time series via symbolic approximation and large language models",
         'long_description_content_type':'text/x-rst',
         'url':"https://github.com/inEXASCALE/llm-abba",
         'license':'BSD 3-Clause'
     }
 
 
-comp = Extension('xabba.comp',
+comp = Extension('llmabba.comp',
                         sources=[__package__+'/comp.pyx'])
 
-agg = Extension('xabba.agg',
+agg = Extension('llmabba.agg',
                         sources=[__package__+'/agg.pyx'])
 
-inverse= Extension('xabba.inverse',
+inverse= Extension('llmabba.inverse',
                         sources=[__package__+'/inverse.pyx'])
 
 
