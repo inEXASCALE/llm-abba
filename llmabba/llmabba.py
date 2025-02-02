@@ -127,7 +127,6 @@ class LLMABBA:
 
         model_tokenizer.padding_side = 'right'
         model_tokenizer.pad_token = model_tokenizer.eos_token
-        print(len(model_tokenizer))
 
         mistral_vocab = model_tokenizer.get_vocab()
 
@@ -152,7 +151,7 @@ class LLMABBA:
     
 
 
-    def save_model(self):
+    def save_model(self, parameter_types="ABBA"):
         pass
 
 
