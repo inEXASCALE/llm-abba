@@ -1,5 +1,3 @@
-# LLM-ABBA
-
 LLM-ABBA
 ========
 
