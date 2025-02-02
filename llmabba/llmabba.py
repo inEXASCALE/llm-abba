@@ -62,7 +62,7 @@ class LLMABBA:
 
     def process(self, data, task, seg_length=16, 
                 seq_len_pre = 168, scalar="z-score",
-                seq_len_post = 168, data_name="ETTh1"):
+                seq_len_post = 168, data_name="ETTh1", inference_mode=False):
         """Load data and process data"""
         if scalar == "min-max":
             self.scaler = preprocessing.MinMaxScaler(feature_range=(0, 1))
@@ -78,10 +78,13 @@ class LLMABBA:
         else:
             raise NotImplementedError("Method is not implemented, please contact the maintenance team.")
             
-        self.features = []
-        self.target = []
+        features = []
+        target = []
 
-
+        if inference_mode:
+            return features
+        else:
+            return features, target
 
     def build(self, max_len=512, batch_size=4):
         """Define models with user-defined parameters"""
@@ -140,10 +143,13 @@ class LLMABBA:
         ft_model = PeftModel.from_pretrained(model, output_dir + "/" + peft_file[0])
 
 
-    def train(self):
-        pass
+    def train(self, validation_rate=[8, 2]):
+        """Train with validation"""
 
+        return self
 
+    def inference(self, data):
+        """Inference """
+        processed_data = self.process(data, inference_mode=True)
 
-    def inference(self):
-        pass
+        return self.mode(processed_data)
