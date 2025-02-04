@@ -5,4 +5,4 @@ from .comp import compress
 from .agg import aggregate 
 from .inverse import *
 
-__name__ =  'llm-abba'
+__name__ =  'llmabba'

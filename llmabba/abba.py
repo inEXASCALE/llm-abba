@@ -34,59 +34,74 @@ def compute_storage(centers, strings, bits_for_len, bits_for_inc, bits_for_ts=32
 def symbolsAssign(clusters, alphabet_set=0):
     """
     Automatically assign symbols to different groups, start with '!'
-    
+
     Parameters
     ----------
     clusters - list or pd.Series or array
         The list of labels.
-            
+
     alphabet_set - int or list
         The list of alphabet letter.
-        
+
     ----------
     Return:
-    
+
     string (list of string), alphabets(numpy.ndarray): for the
-    corresponding symbolic sequence and for mapping from symbols to labels or 
+    corresponding symbolic sequence and for mapping from symbols to labels or
     labels to symbols, repectively.
 
     """
-    
+
     if alphabet_set == 0:
-        alphabets = ['A','a','B','b','C','c','D','d','E','e',
-                    'F','f','G','g','H','h','I','i','J','j',
-                    'K','k','L','l','M','m','N','n','O','o',
-                    'P','p','Q','q','R','r','S','s','T','t',
-                    'U','u','V','v','W','w','X','x','Y','y','Z','z']
-    
+        alphabets = ['A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e',
+                     'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i', 'J', 'j',
+                     'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o',
+                     'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't',
+                     'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x', 'Y', 'y', 'Z', 'z']
+
     elif alphabet_set == 1:
         alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
-                    'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 
-                    'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 
-                    'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 
-                    'w', 'x', 'y', 'z']
-    
-    elif isinstance(alphabet_set, list) and len(alphabets):
+                     'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+                     'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+                     'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+                     'w', 'x', 'y', 'z']
+
+    elif isinstance(alphabet_set, list) and len(alphabet_set):
         alphabets = alphabet_set
-       
+
     else:
         alphabets = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
-                    'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 
-                    'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-                    'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
-                    'W', 'X', 'Y', 'Z']
-        
+                     'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
+                     'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+                     'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+                     'W', 'X', 'Y', 'Z']
+
     clusters = pd.Series(clusters)
     N = len(clusters.unique())
 
-    cluster_sort = [0] * N 
+    cluster_sort = [0] * N
     counter = collections.Counter(clusters)
     for ind, el in enumerate(counter.most_common()):
         cluster_sort[ind] = el[0]
 
-    if N >= len(alphabets):
-        alphabets = [chr(i+33) for i in range(0, N)]
+    # if N >= len(alphabets):
+    #     alphabets = [chr(i+33) for i in range(0, N)]
+    # else:
+    #     alphabets = alphabets[:N]
+
+    # /home/kangchen/.local/lib/python3.11/site-packages/fABBA/jabba/
+
+    if N >= len(alphabets) and len(alphabets) == 32000:
+        print("############################  Change the Alphabet  ############################")
+        print("How many new alphabet needed : " + str(N - 32000))
+        needed_alphabet_len = N - 32000
+        for i in range(0, needed_alphabet_len):
+            alphabets.append(str(i) + 'ABBA')
+    elif N >= len(alphabets) and len(alphabets) != 32000:
+        print("The length of used symbols is: " + str(N))
+        alphabets = [chr(i + 33) for i in range(0, N)]
     else:
+        print("The length of used symbols is: " + str(N))
         alphabets = alphabets[:N]
 
     alphabets = np.asarray(alphabets)
@@ -477,7 +492,7 @@ class XABBA(object):
         self.quantizer_inc = quant(bits=self.bits_for_inc)
         centers[:, 0] = self.quantizer_len(centers[:, 0])
         centers[:, 1] = self.quantizer_inc(centers[:, 1])
-        
+
         string, alphabets = symbolsAssign(labels, alphabet_set)
         self.parameters = Model(centers, alphabets)
         

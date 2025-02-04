@@ -1,0 +1,20 @@
+#!/bin/sh
+#SBATCH --partition=amdgpulong
+#SBATCH --time=72:00:00
+#SBATCH --gres=gpu:1
+#SBATCH --ntasks-per-node=1 # tasks per node
+#SBATCH --mem-per-gpu=80000
+#SBATCH --job-name=C_TS_Mistral
+#SBATCH --err=Mistral_Ts_Classification_r16.err
+#SBATCH --out=Mistral_Ts_Classification_r16.out
+#SBATCH --mail-user=kangchen@fel.cvut.cz    # where send info about job
+#SBATCH --mail-type=ALL              # what to send, valid type values are NONE, BEGIN, END, FAIL, REQUEUE, ALL
+
+/bin/hostname
+srun -l /bin/hostname
+srun -l /bin/pwd
+
+ml Python/3.10.8-GCCcore-12.2.0
+source /home/kangchen/QABBA-ECE/EnvABBA/bin/activate
+cd /home/kangchen/llm-abba-master/examples/
+python demo-ts-classification.py
