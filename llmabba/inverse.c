@@ -4,12 +4,12 @@
 {
     "distutils": {
         "depends": [],
-        "name": "xabba.inverse",
+        "name": "llmabba.inverse",
         "sources": [
-            "xabba/inverse.pyx"
+            "llmabba/inverse.pyx"
         ]
     },
-    "module_name": "xabba.inverse"
+    "module_name": "llmabba.inverse"
 }
 END: Cython Metadata */
 
@@ -1229,8 +1229,8 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__xabba__inverse
-#define __PYX_HAVE_API__xabba__inverse
+#define __PYX_HAVE__llmabba__inverse
+#define __PYX_HAVE_API__llmabba__inverse
 /* Early includes */
 #include <string.h>
 #include <stdio.h>
@@ -1514,7 +1514,7 @@ static const char *__pyx_filename;
 /* #### Code section: filename_table ### */
 
 static const char *__pyx_f[] = {
-  "xabba/inverse.pyx",
+  "llmabba/inverse.pyx",
   "<stringsource>",
   "__init__.cython-30.pxd",
   "type.pxd",
@@ -3167,7 +3167,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy_7ndarray_4data_data(PyArrayObject *__p
 /* Module declarations from "numpy" */
 static CYTHON_INLINE int __pyx_f_5numpy_import_array(void); /*proto*/
 
-/* Module declarations from "xabba.inverse" */
+/* Module declarations from "llmabba.inverse" */
 static PyObject *__pyx_collections_abc_Sequence = 0;
 static PyObject *generic = 0;
 static PyObject *strided = 0;
@@ -3176,9 +3176,9 @@ static PyObject *contiguous = 0;
 static PyObject *indirect_contiguous = 0;
 static int __pyx_memoryview_thread_locks_used;
 static PyThread_type_lock __pyx_memoryview_thread_locks[8];
-static PyObject *__pyx_f_5xabba_7inverse_inv_digitize(PyObject *, PyArrayObject *, PyObject *, int __pyx_skip_dispatch); /*proto*/
-static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice, int __pyx_skip_dispatch); /*proto*/
-static PyObject *__pyx_f_5xabba_7inverse_inv_compress(__Pyx_memviewslice, double, int __pyx_skip_dispatch); /*proto*/
+static PyObject *__pyx_f_7llmabba_7inverse_inv_digitize(PyObject *, PyArrayObject *, PyObject *, int __pyx_skip_dispatch); /*proto*/
+static PyObject *__pyx_f_7llmabba_7inverse_quantize(__Pyx_memviewslice, int __pyx_skip_dispatch); /*proto*/
+static PyObject *__pyx_f_7llmabba_7inverse_inv_compress(__Pyx_memviewslice, double, int __pyx_skip_dispatch); /*proto*/
 static int __pyx_array_allocate_buffer(struct __pyx_array_obj *); /*proto*/
 static struct __pyx_array_obj *__pyx_array_new(PyObject *, Py_ssize_t, char *, char *, char *); /*proto*/
 static PyObject *__pyx_memoryview_new(PyObject *, int, int, __Pyx_TypeInfo *); /*proto*/
@@ -3217,11 +3217,11 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *, 
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_float64_t = { "float64_t", NULL, sizeof(__pyx_t_5numpy_float64_t), { 0 }, 0, 'R', 0, 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_double = { "double", NULL, sizeof(double), { 0 }, 0, 'R', 0, 0 };
 /* #### Code section: before_global_var ### */
-#define __Pyx_MODULE_NAME "xabba.inverse"
-extern int __pyx_module_is_main_xabba__inverse;
-int __pyx_module_is_main_xabba__inverse = 0;
+#define __Pyx_MODULE_NAME "llmabba.inverse"
+extern int __pyx_module_is_main_llmabba__inverse;
+int __pyx_module_is_main_llmabba__inverse = 0;
 
-/* Implementation of "xabba.inverse" */
+/* Implementation of "llmabba.inverse" */
 /* #### Code section: global_var ### */
 static PyObject *__pyx_builtin_round;
 static PyObject *__pyx_builtin_range;
@@ -3328,19 +3328,19 @@ static const char __pyx_k_version_info[] = "version_info";
 static const char __pyx_k_class_getitem[] = "__class_getitem__";
 static const char __pyx_k_inv_transform[] = "inv_transform";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
-static const char __pyx_k_xabba_inverse[] = "xabba.inverse";
 static const char __pyx_k_AssertionError[] = "AssertionError";
 static const char __pyx_k_View_MemoryView[] = "View.MemoryView";
 static const char __pyx_k_allocate_buffer[] = "allocate_buffer";
 static const char __pyx_k_collections_abc[] = "collections.abc";
 static const char __pyx_k_dtype_is_object[] = "dtype_is_object";
+static const char __pyx_k_llmabba_inverse[] = "llmabba.inverse";
 static const char __pyx_k_pyx_PickleError[] = "__pyx_PickleError";
 static const char __pyx_k_setstate_cython[] = "__setstate_cython__";
 static const char __pyx_k_pyx_unpickle_Enum[] = "__pyx_unpickle_Enum";
-static const char __pyx_k_xabba_inverse_pyx[] = "xabba/inverse.pyx";
 static const char __pyx_k_asyncio_coroutines[] = "asyncio.coroutines";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_strided_and_direct[] = "<strided and direct>";
+static const char __pyx_k_llmabba_inverse_pyx[] = "llmabba/inverse.pyx";
 static const char __pyx_k_strided_and_indirect[] = "<strided and indirect>";
 static const char __pyx_k_Invalid_shape_in_axis[] = "Invalid shape in axis ";
 static const char __pyx_k_contiguous_and_direct[] = "<contiguous and direct>";
@@ -3413,10 +3413,10 @@ static void __pyx_memoryviewslice___pyx_pf_15View_dot_MemoryView_16_memoryviewsl
 static PyObject *__pyx_pf___pyx_memoryviewslice___reduce_cython__(CYTHON_UNUSED struct __pyx_memoryviewslice_obj *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf___pyx_memoryviewslice_2__setstate_cython__(CYTHON_UNUSED struct __pyx_memoryviewslice_obj *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_15View_dot_MemoryView___pyx_unpickle_Enum(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v___pyx_type, long __pyx_v___pyx_checksum, PyObject *__pyx_v___pyx_state); /* proto */
-static PyObject *__pyx_pf_5xabba_7inverse_inv_transform(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_strings, PyArrayObject *__pyx_v_centers, PyObject *__pyx_v_alphabets, double __pyx_v_start); /* proto */
-static PyObject *__pyx_pf_5xabba_7inverse_2inv_digitize(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_strings, PyArrayObject *__pyx_v_centers, PyObject *__pyx_v_alphabets); /* proto */
-static PyObject *__pyx_pf_5xabba_7inverse_4quantize(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_pieces); /* proto */
-static PyObject *__pyx_pf_5xabba_7inverse_6inv_compress(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_pieces, double __pyx_v_start); /* proto */
+static PyObject *__pyx_pf_7llmabba_7inverse_inv_transform(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_strings, PyArrayObject *__pyx_v_centers, PyObject *__pyx_v_alphabets, double __pyx_v_start); /* proto */
+static PyObject *__pyx_pf_7llmabba_7inverse_2inv_digitize(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_strings, PyArrayObject *__pyx_v_centers, PyObject *__pyx_v_alphabets); /* proto */
+static PyObject *__pyx_pf_7llmabba_7inverse_4quantize(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_pieces); /* proto */
+static PyObject *__pyx_pf_7llmabba_7inverse_6inv_compress(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_pieces, double __pyx_v_start); /* proto */
 static PyObject *__pyx_tp_new_array(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_Enum(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_memoryview(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
@@ -3580,6 +3580,8 @@ typedef struct {
   PyObject *__pyx_kp_u_isenabled;
   PyObject *__pyx_n_s_itemsize;
   PyObject *__pyx_kp_s_itemsize_0_for_cython_array;
+  PyObject *__pyx_n_s_llmabba_inverse;
+  PyObject *__pyx_kp_s_llmabba_inverse_pyx;
   PyObject *__pyx_n_s_main;
   PyObject *__pyx_n_s_memview;
   PyObject *__pyx_n_s_mode;
@@ -3634,8 +3636,6 @@ typedef struct {
   PyObject *__pyx_n_s_update;
   PyObject *__pyx_n_s_version_info;
   PyObject *__pyx_n_s_vstack;
-  PyObject *__pyx_n_s_xabba_inverse;
-  PyObject *__pyx_kp_s_xabba_inverse_pyx;
   PyObject *__pyx_int_0;
   PyObject *__pyx_int_1;
   PyObject *__pyx_int_2;
@@ -3817,6 +3817,8 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_kp_u_isenabled);
   Py_CLEAR(clear_module_state->__pyx_n_s_itemsize);
   Py_CLEAR(clear_module_state->__pyx_kp_s_itemsize_0_for_cython_array);
+  Py_CLEAR(clear_module_state->__pyx_n_s_llmabba_inverse);
+  Py_CLEAR(clear_module_state->__pyx_kp_s_llmabba_inverse_pyx);
   Py_CLEAR(clear_module_state->__pyx_n_s_main);
   Py_CLEAR(clear_module_state->__pyx_n_s_memview);
   Py_CLEAR(clear_module_state->__pyx_n_s_mode);
@@ -3871,8 +3873,6 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_update);
   Py_CLEAR(clear_module_state->__pyx_n_s_version_info);
   Py_CLEAR(clear_module_state->__pyx_n_s_vstack);
-  Py_CLEAR(clear_module_state->__pyx_n_s_xabba_inverse);
-  Py_CLEAR(clear_module_state->__pyx_kp_s_xabba_inverse_pyx);
   Py_CLEAR(clear_module_state->__pyx_int_0);
   Py_CLEAR(clear_module_state->__pyx_int_1);
   Py_CLEAR(clear_module_state->__pyx_int_2);
@@ -4032,6 +4032,8 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_kp_u_isenabled);
   Py_VISIT(traverse_module_state->__pyx_n_s_itemsize);
   Py_VISIT(traverse_module_state->__pyx_kp_s_itemsize_0_for_cython_array);
+  Py_VISIT(traverse_module_state->__pyx_n_s_llmabba_inverse);
+  Py_VISIT(traverse_module_state->__pyx_kp_s_llmabba_inverse_pyx);
   Py_VISIT(traverse_module_state->__pyx_n_s_main);
   Py_VISIT(traverse_module_state->__pyx_n_s_memview);
   Py_VISIT(traverse_module_state->__pyx_n_s_mode);
@@ -4086,8 +4088,6 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_update);
   Py_VISIT(traverse_module_state->__pyx_n_s_version_info);
   Py_VISIT(traverse_module_state->__pyx_n_s_vstack);
-  Py_VISIT(traverse_module_state->__pyx_n_s_xabba_inverse);
-  Py_VISIT(traverse_module_state->__pyx_kp_s_xabba_inverse_pyx);
   Py_VISIT(traverse_module_state->__pyx_int_0);
   Py_VISIT(traverse_module_state->__pyx_int_1);
   Py_VISIT(traverse_module_state->__pyx_int_2);
@@ -4281,6 +4281,8 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_kp_u_isenabled __pyx_mstate_global->__pyx_kp_u_isenabled
 #define __pyx_n_s_itemsize __pyx_mstate_global->__pyx_n_s_itemsize
 #define __pyx_kp_s_itemsize_0_for_cython_array __pyx_mstate_global->__pyx_kp_s_itemsize_0_for_cython_array
+#define __pyx_n_s_llmabba_inverse __pyx_mstate_global->__pyx_n_s_llmabba_inverse
+#define __pyx_kp_s_llmabba_inverse_pyx __pyx_mstate_global->__pyx_kp_s_llmabba_inverse_pyx
 #define __pyx_n_s_main __pyx_mstate_global->__pyx_n_s_main
 #define __pyx_n_s_memview __pyx_mstate_global->__pyx_n_s_memview
 #define __pyx_n_s_mode __pyx_mstate_global->__pyx_n_s_mode
@@ -4335,8 +4337,6 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_update __pyx_mstate_global->__pyx_n_s_update
 #define __pyx_n_s_version_info __pyx_mstate_global->__pyx_n_s_version_info
 #define __pyx_n_s_vstack __pyx_mstate_global->__pyx_n_s_vstack
-#define __pyx_n_s_xabba_inverse __pyx_mstate_global->__pyx_n_s_xabba_inverse
-#define __pyx_kp_s_xabba_inverse_pyx __pyx_mstate_global->__pyx_kp_s_xabba_inverse_pyx
 #define __pyx_int_0 __pyx_mstate_global->__pyx_int_0
 #define __pyx_int_1 __pyx_mstate_global->__pyx_int_1
 #define __pyx_int_2 __pyx_mstate_global->__pyx_int_2
@@ -19263,7 +19263,7 @@ static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObjec
   return __pyx_r;
 }
 
-/* "xabba/inverse.pyx":6
+/* "llmabba/inverse.pyx":6
  * np.import_array()
  * 
  * @cython.boundscheck(False)             # <<<<<<<<<<<<<<
@@ -19272,16 +19272,16 @@ static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObjec
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5xabba_7inverse_1inv_transform(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_7llmabba_7inverse_1inv_transform(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_5xabba_7inverse_inv_transform, "\n    Convert ABBA symbolic representation back to numeric time series representation.\n\n    Parameters\n    ----------\n    string - string\n        Time series in symbolic representation using unicode characters starting\n        with character 'a'.\n\n    centers - numpy.ndarray\n        centers of clusters from clustering algorithm. Each centre corresponds\n        to character in string.\n\n    alphabets - list\n        The alphabet set for symbols reversing.\n        \n    start - float\n        First element of original time series. Applies vertical shift in\n        reconstruction. If not specified, the default is 0.\n        \n    Returns\n    -------\n    times_series - list\n        Reconstruction of the time series.\n    ");
-static PyMethodDef __pyx_mdef_5xabba_7inverse_1inv_transform = {"inv_transform", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5xabba_7inverse_1inv_transform, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_5xabba_7inverse_inv_transform};
-static PyObject *__pyx_pw_5xabba_7inverse_1inv_transform(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_7llmabba_7inverse_inv_transform, "\n    Convert ABBA symbolic representation back to numeric time series representation.\n\n    Parameters\n    ----------\n    string - string\n        Time series in symbolic representation using unicode characters starting\n        with character 'a'.\n\n    centers - numpy.ndarray\n        centers of clusters from clustering algorithm. Each centre corresponds\n        to character in string.\n\n    alphabets - list\n        The alphabet set for symbols reversing.\n        \n    start - float\n        First element of original time series. Applies vertical shift in\n        reconstruction. If not specified, the default is 0.\n        \n    Returns\n    -------\n    times_series - list\n        Reconstruction of the time series.\n    ");
+static PyMethodDef __pyx_mdef_7llmabba_7inverse_1inv_transform = {"inv_transform", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7llmabba_7inverse_1inv_transform, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7llmabba_7inverse_inv_transform};
+static PyObject *__pyx_pw_7llmabba_7inverse_1inv_transform(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -19400,14 +19400,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __Pyx_Arg_XDECREF_FASTCALL(values[__pyx_temp]);
     }
   }
-  __Pyx_AddTraceback("xabba.inverse.inv_transform", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("llmabba.inverse.inv_transform", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_strings), (&PyList_Type), 1, "strings", 1))) __PYX_ERR(0, 11, __pyx_L1_error)
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_centers), __pyx_ptype_5numpy_ndarray, 1, "centers", 0))) __PYX_ERR(0, 11, __pyx_L1_error)
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_alphabets), (&PyList_Type), 1, "alphabets", 1))) __PYX_ERR(0, 11, __pyx_L1_error)
-  __pyx_r = __pyx_pf_5xabba_7inverse_inv_transform(__pyx_self, __pyx_v_strings, __pyx_v_centers, __pyx_v_alphabets, __pyx_v_start);
+  __pyx_r = __pyx_pf_7llmabba_7inverse_inv_transform(__pyx_self, __pyx_v_strings, __pyx_v_centers, __pyx_v_alphabets, __pyx_v_start);
 
   /* function exit code */
   goto __pyx_L0;
@@ -19424,7 +19424,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5xabba_7inverse_inv_transform(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_strings, PyArrayObject *__pyx_v_centers, PyObject *__pyx_v_alphabets, double __pyx_v_start) {
+static PyObject *__pyx_pf_7llmabba_7inverse_inv_transform(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_strings, PyArrayObject *__pyx_v_centers, PyObject *__pyx_v_alphabets, double __pyx_v_start) {
   __Pyx_memviewslice __pyx_v_pieces = { 0, 0, { 0 }, { 0 }, { 0 } };
   PyObject *__pyx_v_time_series = 0;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_centers;
@@ -19447,14 +19447,14 @@ static PyObject *__pyx_pf_5xabba_7inverse_inv_transform(CYTHON_UNUSED PyObject *
   }
   __pyx_pybuffernd_centers.diminfo[0].strides = __pyx_pybuffernd_centers.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_centers.diminfo[0].shape = __pyx_pybuffernd_centers.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_centers.diminfo[1].strides = __pyx_pybuffernd_centers.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_centers.diminfo[1].shape = __pyx_pybuffernd_centers.rcbuffer->pybuffer.shape[1];
 
-  /* "xabba/inverse.pyx":38
+  /* "llmabba/inverse.pyx":38
  *     """
  * 
  *     cdef double[:, :] pieces = inv_digitize(strings, centers, alphabets)             # <<<<<<<<<<<<<<
  * 
  *     pieces = quantize(pieces)
  */
-  __pyx_t_1 = __pyx_f_5xabba_7inverse_inv_digitize(__pyx_v_strings, ((PyArrayObject *)__pyx_v_centers), __pyx_v_alphabets, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_7llmabba_7inverse_inv_digitize(__pyx_v_strings, ((PyArrayObject *)__pyx_v_centers), __pyx_v_alphabets, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 38, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_2.memview)) __PYX_ERR(0, 38, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -19462,14 +19462,14 @@ static PyObject *__pyx_pf_5xabba_7inverse_inv_transform(CYTHON_UNUSED PyObject *
   __pyx_t_2.memview = NULL;
   __pyx_t_2.data = NULL;
 
-  /* "xabba/inverse.pyx":40
+  /* "llmabba/inverse.pyx":40
  *     cdef double[:, :] pieces = inv_digitize(strings, centers, alphabets)
  * 
  *     pieces = quantize(pieces)             # <<<<<<<<<<<<<<
  *     cdef list time_series = inv_compress(pieces, start)
  *     return time_series
  */
-  __pyx_t_1 = __pyx_f_5xabba_7inverse_quantize(__pyx_v_pieces, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_7llmabba_7inverse_quantize(__pyx_v_pieces, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __Pyx_PyObject_to_MemoryviewSlice_dsds_double(__pyx_t_1, PyBUF_WRITABLE); if (unlikely(!__pyx_t_2.memview)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -19478,20 +19478,20 @@ static PyObject *__pyx_pf_5xabba_7inverse_inv_transform(CYTHON_UNUSED PyObject *
   __pyx_t_2.memview = NULL;
   __pyx_t_2.data = NULL;
 
-  /* "xabba/inverse.pyx":41
+  /* "llmabba/inverse.pyx":41
  * 
  *     pieces = quantize(pieces)
  *     cdef list time_series = inv_compress(pieces, start)             # <<<<<<<<<<<<<<
  *     return time_series
  * 
  */
-  __pyx_t_1 = __pyx_f_5xabba_7inverse_inv_compress(__pyx_v_pieces, __pyx_v_start, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 41, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_7llmabba_7inverse_inv_compress(__pyx_v_pieces, __pyx_v_start, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 41, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (!(likely(PyList_CheckExact(__pyx_t_1))||((__pyx_t_1) == Py_None) || __Pyx_RaiseUnexpectedTypeError("list", __pyx_t_1))) __PYX_ERR(0, 41, __pyx_L1_error)
   __pyx_v_time_series = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "xabba/inverse.pyx":42
+  /* "llmabba/inverse.pyx":42
  *     pieces = quantize(pieces)
  *     cdef list time_series = inv_compress(pieces, start)
  *     return time_series             # <<<<<<<<<<<<<<
@@ -19503,7 +19503,7 @@ static PyObject *__pyx_pf_5xabba_7inverse_inv_transform(CYTHON_UNUSED PyObject *
   __pyx_r = __pyx_v_time_series;
   goto __pyx_L0;
 
-  /* "xabba/inverse.pyx":6
+  /* "llmabba/inverse.pyx":6
  * np.import_array()
  * 
  * @cython.boundscheck(False)             # <<<<<<<<<<<<<<
@@ -19521,7 +19521,7 @@ static PyObject *__pyx_pf_5xabba_7inverse_inv_transform(CYTHON_UNUSED PyObject *
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_centers.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("xabba.inverse.inv_transform", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("llmabba.inverse.inv_transform", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -19534,7 +19534,7 @@ static PyObject *__pyx_pf_5xabba_7inverse_inv_transform(CYTHON_UNUSED PyObject *
   return __pyx_r;
 }
 
-/* "xabba/inverse.pyx":46
+/* "llmabba/inverse.pyx":46
  * 
  * 
  * cpdef inv_digitize(list strings, np.ndarray[np.float64_t, ndim=2] centers, list alphabets):             # <<<<<<<<<<<<<<
@@ -19542,14 +19542,14 @@ static PyObject *__pyx_pf_5xabba_7inverse_inv_transform(CYTHON_UNUSED PyObject *
  *     Convert symbolic representation back to compressed representation for reconstruction.
  */
 
-static PyObject *__pyx_pw_5xabba_7inverse_3inv_digitize(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_7llmabba_7inverse_3inv_digitize(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyObject *__pyx_f_5xabba_7inverse_inv_digitize(PyObject *__pyx_v_strings, PyArrayObject *__pyx_v_centers, PyObject *__pyx_v_alphabets, CYTHON_UNUSED int __pyx_skip_dispatch) {
+static PyObject *__pyx_f_7llmabba_7inverse_inv_digitize(PyObject *__pyx_v_strings, PyArrayObject *__pyx_v_centers, PyObject *__pyx_v_alphabets, CYTHON_UNUSED int __pyx_skip_dispatch) {
   PyArrayObject *__pyx_v_pieces = 0;
   PyObject *__pyx_7genexpr__pyx_v_p = NULL;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_centers;
@@ -19589,7 +19589,7 @@ static PyObject *__pyx_f_5xabba_7inverse_inv_digitize(PyObject *__pyx_v_strings,
   }
   __pyx_pybuffernd_centers.diminfo[0].strides = __pyx_pybuffernd_centers.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_centers.diminfo[0].shape = __pyx_pybuffernd_centers.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_centers.diminfo[1].strides = __pyx_pybuffernd_centers.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_centers.diminfo[1].shape = __pyx_pybuffernd_centers.rcbuffer->pybuffer.shape[1];
 
-  /* "xabba/inverse.pyx":70
+  /* "llmabba/inverse.pyx":70
  * 
  *     cdef np.ndarray[np.float64_t, ndim=2] pieces
  *     pieces = np.vstack([centers[alphabets.index(p)][:2] for p in strings])             # <<<<<<<<<<<<<<
@@ -19691,7 +19691,7 @@ static PyObject *__pyx_f_5xabba_7inverse_inv_digitize(PyObject *__pyx_v_strings,
   __pyx_v_pieces = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "xabba/inverse.pyx":72
+  /* "llmabba/inverse.pyx":72
  *     pieces = np.vstack([centers[alphabets.index(p)][:2] for p in strings])
  * 
  *     return memoryview(pieces)             # <<<<<<<<<<<<<<
@@ -19705,7 +19705,7 @@ static PyObject *__pyx_f_5xabba_7inverse_inv_digitize(PyObject *__pyx_v_strings,
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "xabba/inverse.pyx":46
+  /* "llmabba/inverse.pyx":46
  * 
  * 
  * cpdef inv_digitize(list strings, np.ndarray[np.float64_t, ndim=2] centers, list alphabets):             # <<<<<<<<<<<<<<
@@ -19728,7 +19728,7 @@ static PyObject *__pyx_f_5xabba_7inverse_inv_digitize(PyObject *__pyx_v_strings,
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_centers.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_pieces.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("xabba.inverse.inv_digitize", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("llmabba.inverse.inv_digitize", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   goto __pyx_L2;
   __pyx_L0:;
@@ -19743,16 +19743,16 @@ static PyObject *__pyx_f_5xabba_7inverse_inv_digitize(PyObject *__pyx_v_strings,
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5xabba_7inverse_3inv_digitize(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_7llmabba_7inverse_3inv_digitize(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_5xabba_7inverse_2inv_digitize, "\n    Convert symbolic representation back to compressed representation for reconstruction.\n\n    Parameters\n    ----------\n    string - string\n        Time series in symbolic representation using unicode characters starting\n        with character 'a'.\n\n    centers - numpy array\n        centers of clusters from clustering algorithm. Each centre corresponds\n        to character in string.\n\n    alphabets - list\n        The alphabet set for symbols reversing.\n        \n    Returns\n    -------\n    pieces - np.array\n        Time series in compressed format. See compression.\n    ");
-static PyMethodDef __pyx_mdef_5xabba_7inverse_3inv_digitize = {"inv_digitize", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5xabba_7inverse_3inv_digitize, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_5xabba_7inverse_2inv_digitize};
-static PyObject *__pyx_pw_5xabba_7inverse_3inv_digitize(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_7llmabba_7inverse_2inv_digitize, "\n    Convert symbolic representation back to compressed representation for reconstruction.\n\n    Parameters\n    ----------\n    string - string\n        Time series in symbolic representation using unicode characters starting\n        with character 'a'.\n\n    centers - numpy array\n        centers of clusters from clustering algorithm. Each centre corresponds\n        to character in string.\n\n    alphabets - list\n        The alphabet set for symbols reversing.\n        \n    Returns\n    -------\n    pieces - np.array\n        Time series in compressed format. See compression.\n    ");
+static PyMethodDef __pyx_mdef_7llmabba_7inverse_3inv_digitize = {"inv_digitize", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7llmabba_7inverse_3inv_digitize, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7llmabba_7inverse_2inv_digitize};
+static PyObject *__pyx_pw_7llmabba_7inverse_3inv_digitize(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -19852,14 +19852,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       __Pyx_Arg_XDECREF_FASTCALL(values[__pyx_temp]);
     }
   }
-  __Pyx_AddTraceback("xabba.inverse.inv_digitize", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("llmabba.inverse.inv_digitize", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_strings), (&PyList_Type), 1, "strings", 1))) __PYX_ERR(0, 46, __pyx_L1_error)
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_centers), __pyx_ptype_5numpy_ndarray, 1, "centers", 0))) __PYX_ERR(0, 46, __pyx_L1_error)
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_alphabets), (&PyList_Type), 1, "alphabets", 1))) __PYX_ERR(0, 46, __pyx_L1_error)
-  __pyx_r = __pyx_pf_5xabba_7inverse_2inv_digitize(__pyx_self, __pyx_v_strings, __pyx_v_centers, __pyx_v_alphabets);
+  __pyx_r = __pyx_pf_7llmabba_7inverse_2inv_digitize(__pyx_self, __pyx_v_strings, __pyx_v_centers, __pyx_v_alphabets);
 
   /* function exit code */
   goto __pyx_L0;
@@ -19876,7 +19876,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5xabba_7inverse_2inv_digitize(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_strings, PyArrayObject *__pyx_v_centers, PyObject *__pyx_v_alphabets) {
+static PyObject *__pyx_pf_7llmabba_7inverse_2inv_digitize(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_strings, PyArrayObject *__pyx_v_centers, PyObject *__pyx_v_alphabets) {
   __Pyx_LocalBuf_ND __pyx_pybuffernd_centers;
   __Pyx_Buffer __pyx_pybuffer_centers;
   PyObject *__pyx_r = NULL;
@@ -19896,7 +19896,7 @@ static PyObject *__pyx_pf_5xabba_7inverse_2inv_digitize(CYTHON_UNUSED PyObject *
   }
   __pyx_pybuffernd_centers.diminfo[0].strides = __pyx_pybuffernd_centers.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_centers.diminfo[0].shape = __pyx_pybuffernd_centers.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_centers.diminfo[1].strides = __pyx_pybuffernd_centers.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_centers.diminfo[1].shape = __pyx_pybuffernd_centers.rcbuffer->pybuffer.shape[1];
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5xabba_7inverse_inv_digitize(__pyx_v_strings, __pyx_v_centers, __pyx_v_alphabets, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 46, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_7llmabba_7inverse_inv_digitize(__pyx_v_strings, __pyx_v_centers, __pyx_v_alphabets, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -19911,7 +19911,7 @@ static PyObject *__pyx_pf_5xabba_7inverse_2inv_digitize(CYTHON_UNUSED PyObject *
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_centers.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("xabba.inverse.inv_digitize", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("llmabba.inverse.inv_digitize", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   goto __pyx_L2;
   __pyx_L0:;
@@ -19922,7 +19922,7 @@ static PyObject *__pyx_pf_5xabba_7inverse_2inv_digitize(CYTHON_UNUSED PyObject *
   return __pyx_r;
 }
 
-/* "xabba/inverse.pyx":76
+/* "llmabba/inverse.pyx":76
  * 
  * 
  * cpdef quantize(double[:, :] pieces):             # <<<<<<<<<<<<<<
@@ -19930,14 +19930,14 @@ static PyObject *__pyx_pf_5xabba_7inverse_2inv_digitize(CYTHON_UNUSED PyObject *
  *     Realign window lengths with integer grid.
  */
 
-static PyObject *__pyx_pw_5xabba_7inverse_5quantize(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_7llmabba_7inverse_5quantize(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pieces, CYTHON_UNUSED int __pyx_skip_dispatch) {
+static PyObject *__pyx_f_7llmabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pieces, CYTHON_UNUSED int __pyx_skip_dispatch) {
   double __pyx_v_corr;
   Py_ssize_t __pyx_v_p;
   PyObject *__pyx_r = NULL;
@@ -19960,7 +19960,7 @@ static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pie
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("quantize", 1);
 
-  /* "xabba/inverse.pyx":92
+  /* "llmabba/inverse.pyx":92
  *     cdef Py_ssize_t p
  * 
  *     if len(pieces) == 1:             # <<<<<<<<<<<<<<
@@ -19971,7 +19971,7 @@ static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pie
   __pyx_t_2 = (__pyx_t_1 == 1);
   if (__pyx_t_2) {
 
-    /* "xabba/inverse.pyx":93
+    /* "llmabba/inverse.pyx":93
  * 
  *     if len(pieces) == 1:
  *         pieces[0,0] = round(pieces[0,0])             # <<<<<<<<<<<<<<
@@ -20017,7 +20017,7 @@ static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pie
     }
     *((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_pieces.data + __pyx_t_4 * __pyx_v_pieces.strides[0]) ) + __pyx_t_3 * __pyx_v_pieces.strides[1]) )) = __pyx_t_8;
 
-    /* "xabba/inverse.pyx":92
+    /* "llmabba/inverse.pyx":92
  *     cdef Py_ssize_t p
  * 
  *     if len(pieces) == 1:             # <<<<<<<<<<<<<<
@@ -20027,7 +20027,7 @@ static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pie
     goto __pyx_L3;
   }
 
-  /* "xabba/inverse.pyx":96
+  /* "llmabba/inverse.pyx":96
  * 
  *     else:
  *         for p in range(len(pieces)-1):             # <<<<<<<<<<<<<<
@@ -20041,7 +20041,7 @@ static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pie
     for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_1; __pyx_t_10+=1) {
       __pyx_v_p = __pyx_t_10;
 
-      /* "xabba/inverse.pyx":97
+      /* "llmabba/inverse.pyx":97
  *     else:
  *         for p in range(len(pieces)-1):
  *             corr = round(pieces[p,0]) - pieces[p,0]             # <<<<<<<<<<<<<<
@@ -20093,7 +20093,7 @@ static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pie
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __pyx_v_corr = __pyx_t_8;
 
-      /* "xabba/inverse.pyx":98
+      /* "llmabba/inverse.pyx":98
  *         for p in range(len(pieces)-1):
  *             corr = round(pieces[p,0]) - pieces[p,0]
  *             pieces[p,0] = round(pieces[p,0] + corr)             # <<<<<<<<<<<<<<
@@ -20139,7 +20139,7 @@ static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pie
       }
       *((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_pieces.data + __pyx_t_4 * __pyx_v_pieces.strides[0]) ) + __pyx_t_3 * __pyx_v_pieces.strides[1]) )) = __pyx_t_8;
 
-      /* "xabba/inverse.pyx":99
+      /* "llmabba/inverse.pyx":99
  *             corr = round(pieces[p,0]) - pieces[p,0]
  *             pieces[p,0] = round(pieces[p,0] + corr)
  *             pieces[p+1,0] = pieces[p+1,0] - corr             # <<<<<<<<<<<<<<
@@ -20178,7 +20178,7 @@ static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pie
       }
       *((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_pieces.data + __pyx_t_12 * __pyx_v_pieces.strides[0]) ) + __pyx_t_13 * __pyx_v_pieces.strides[1]) )) = ((*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_pieces.data + __pyx_t_3 * __pyx_v_pieces.strides[0]) ) + __pyx_t_4 * __pyx_v_pieces.strides[1]) ))) - __pyx_v_corr);
 
-      /* "xabba/inverse.pyx":100
+      /* "llmabba/inverse.pyx":100
  *             pieces[p,0] = round(pieces[p,0] + corr)
  *             pieces[p+1,0] = pieces[p+1,0] - corr
  *             if pieces[p,0] == 0:             # <<<<<<<<<<<<<<
@@ -20203,7 +20203,7 @@ static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pie
       __pyx_t_2 = ((*((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_pieces.data + __pyx_t_4 * __pyx_v_pieces.strides[0]) ) + __pyx_t_3 * __pyx_v_pieces.strides[1]) ))) == 0.0);
       if (__pyx_t_2) {
 
-        /* "xabba/inverse.pyx":101
+        /* "llmabba/inverse.pyx":101
  *             pieces[p+1,0] = pieces[p+1,0] - corr
  *             if pieces[p,0] == 0:
  *                 pieces[p,0] = 1             # <<<<<<<<<<<<<<
@@ -20227,7 +20227,7 @@ static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pie
         }
         *((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_pieces.data + __pyx_t_3 * __pyx_v_pieces.strides[0]) ) + __pyx_t_4 * __pyx_v_pieces.strides[1]) )) = 1.0;
 
-        /* "xabba/inverse.pyx":102
+        /* "llmabba/inverse.pyx":102
  *             if pieces[p,0] == 0:
  *                 pieces[p,0] = 1
  *                 pieces[p+1,0] -= 1             # <<<<<<<<<<<<<<
@@ -20251,7 +20251,7 @@ static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pie
         }
         *((double *) ( /* dim=1 */ (( /* dim=0 */ (__pyx_v_pieces.data + __pyx_t_4 * __pyx_v_pieces.strides[0]) ) + __pyx_t_3 * __pyx_v_pieces.strides[1]) )) -= 1.0;
 
-        /* "xabba/inverse.pyx":100
+        /* "llmabba/inverse.pyx":100
  *             pieces[p,0] = round(pieces[p,0] + corr)
  *             pieces[p+1,0] = pieces[p+1,0] - corr
  *             if pieces[p,0] == 0:             # <<<<<<<<<<<<<<
@@ -20261,7 +20261,7 @@ static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pie
       }
     }
 
-    /* "xabba/inverse.pyx":103
+    /* "llmabba/inverse.pyx":103
  *                 pieces[p,0] = 1
  *                 pieces[p+1,0] -= 1
  *         pieces[-1,0] = round(pieces[-1,0],0)             # <<<<<<<<<<<<<<
@@ -20317,7 +20317,7 @@ static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pie
   }
   __pyx_L3:;
 
-  /* "xabba/inverse.pyx":105
+  /* "llmabba/inverse.pyx":105
  *         pieces[-1,0] = round(pieces[-1,0],0)
  * 
  *     return pieces             # <<<<<<<<<<<<<<
@@ -20331,7 +20331,7 @@ static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pie
   __pyx_t_7 = 0;
   goto __pyx_L0;
 
-  /* "xabba/inverse.pyx":76
+  /* "llmabba/inverse.pyx":76
  * 
  * 
  * cpdef quantize(double[:, :] pieces):             # <<<<<<<<<<<<<<
@@ -20344,7 +20344,7 @@ static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pie
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_7);
   __Pyx_XDECREF(__pyx_t_11);
-  __Pyx_AddTraceback("xabba.inverse.quantize", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("llmabba.inverse.quantize", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -20353,16 +20353,16 @@ static PyObject *__pyx_f_5xabba_7inverse_quantize(__Pyx_memviewslice __pyx_v_pie
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5xabba_7inverse_5quantize(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_7llmabba_7inverse_5quantize(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_5xabba_7inverse_4quantize, "\n    Realign window lengths with integer grid.\n\n    Parameters\n    ----------\n    pieces: Time series in compressed representation.\n\n\n    Returns\n    -------\n    pieces: Time series in compressed representation with window length adjusted to integer grid.\n    ");
-static PyMethodDef __pyx_mdef_5xabba_7inverse_5quantize = {"quantize", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5xabba_7inverse_5quantize, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_5xabba_7inverse_4quantize};
-static PyObject *__pyx_pw_5xabba_7inverse_5quantize(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_7llmabba_7inverse_4quantize, "\n    Realign window lengths with integer grid.\n\n    Parameters\n    ----------\n    pieces: Time series in compressed representation.\n\n\n    Returns\n    -------\n    pieces: Time series in compressed representation with window length adjusted to integer grid.\n    ");
+static PyMethodDef __pyx_mdef_7llmabba_7inverse_5quantize = {"quantize", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7llmabba_7inverse_5quantize, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7llmabba_7inverse_4quantize};
+static PyObject *__pyx_pw_7llmabba_7inverse_5quantize(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -20433,11 +20433,11 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
     }
   }
   __PYX_XCLEAR_MEMVIEW(&__pyx_v_pieces, 1);
-  __Pyx_AddTraceback("xabba.inverse.quantize", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("llmabba.inverse.quantize", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_5xabba_7inverse_4quantize(__pyx_self, __pyx_v_pieces);
+  __pyx_r = __pyx_pf_7llmabba_7inverse_4quantize(__pyx_self, __pyx_v_pieces);
 
   /* function exit code */
   __PYX_XCLEAR_MEMVIEW(&__pyx_v_pieces, 1);
@@ -20451,7 +20451,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5xabba_7inverse_4quantize(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_pieces) {
+static PyObject *__pyx_pf_7llmabba_7inverse_4quantize(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_pieces) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -20461,7 +20461,7 @@ static PyObject *__pyx_pf_5xabba_7inverse_4quantize(CYTHON_UNUSED PyObject *__py
   __Pyx_RefNannySetupContext("quantize", 1);
   __Pyx_XDECREF(__pyx_r);
   if (unlikely(!__pyx_v_pieces.memview)) { __Pyx_RaiseUnboundLocalError("pieces"); __PYX_ERR(0, 76, __pyx_L1_error) }
-  __pyx_t_1 = __pyx_f_5xabba_7inverse_quantize(__pyx_v_pieces, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_7llmabba_7inverse_quantize(__pyx_v_pieces, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 76, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -20470,7 +20470,7 @@ static PyObject *__pyx_pf_5xabba_7inverse_4quantize(CYTHON_UNUSED PyObject *__py
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("xabba.inverse.quantize", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("llmabba.inverse.quantize", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -20478,7 +20478,7 @@ static PyObject *__pyx_pf_5xabba_7inverse_4quantize(CYTHON_UNUSED PyObject *__py
   return __pyx_r;
 }
 
-/* "xabba/inverse.pyx":109
+/* "llmabba/inverse.pyx":109
  * 
  * 
  * cpdef inv_compress(double[:, :] pieces, double start):             # <<<<<<<<<<<<<<
@@ -20486,14 +20486,14 @@ static PyObject *__pyx_pf_5xabba_7inverse_4quantize(CYTHON_UNUSED PyObject *__py
  *     Reconstruct time series from its first value `ts0` and its `pieces`.
  */
 
-static PyObject *__pyx_pw_5xabba_7inverse_7inv_compress(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_7llmabba_7inverse_7inv_compress(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyObject *__pyx_f_5xabba_7inverse_inv_compress(__Pyx_memviewslice __pyx_v_pieces, double __pyx_v_start, CYTHON_UNUSED int __pyx_skip_dispatch) {
+static PyObject *__pyx_f_7llmabba_7inverse_inv_compress(__Pyx_memviewslice __pyx_v_pieces, double __pyx_v_start, CYTHON_UNUSED int __pyx_skip_dispatch) {
   PyObject *__pyx_v_time_series = 0;
   Py_ssize_t __pyx_v_j;
   PyArrayObject *__pyx_v_x = 0;
@@ -20534,7 +20534,7 @@ static PyObject *__pyx_f_5xabba_7inverse_inv_compress(__Pyx_memviewslice __pyx_v
   __pyx_pybuffernd_y.data = NULL;
   __pyx_pybuffernd_y.rcbuffer = &__pyx_pybuffer_y;
 
-  /* "xabba/inverse.pyx":131
+  /* "llmabba/inverse.pyx":131
  *     """
  * 
  *     cdef list time_series = [start]             # <<<<<<<<<<<<<<
@@ -20551,7 +20551,7 @@ static PyObject *__pyx_f_5xabba_7inverse_inv_compress(__Pyx_memviewslice __pyx_v
   __pyx_v_time_series = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "xabba/inverse.pyx":135
+  /* "llmabba/inverse.pyx":135
  *     cdef np.ndarray[np.float64_t, ndim=1] x, y
  * 
  *     x = np.arange(0,pieces[0,0]+1)/(pieces[0,0])*(pieces[0,1] - start)             # <<<<<<<<<<<<<<
@@ -20668,7 +20668,7 @@ static PyObject *__pyx_f_5xabba_7inverse_inv_compress(__Pyx_memviewslice __pyx_v
   __pyx_v_x = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "xabba/inverse.pyx":136
+  /* "llmabba/inverse.pyx":136
  * 
  *     x = np.arange(0,pieces[0,0]+1)/(pieces[0,0])*(pieces[0,1] - start)
  *     y = start + x             # <<<<<<<<<<<<<<
@@ -20703,7 +20703,7 @@ static PyObject *__pyx_f_5xabba_7inverse_inv_compress(__Pyx_memviewslice __pyx_v
   __pyx_v_y = ((PyArrayObject *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "xabba/inverse.pyx":137
+  /* "llmabba/inverse.pyx":137
  *     x = np.arange(0,pieces[0,0]+1)/(pieces[0,0])*(pieces[0,1] - start)
  *     y = start + x
  *     time_series = time_series + y[1:].tolist()             # <<<<<<<<<<<<<<
@@ -20744,7 +20744,7 @@ static PyObject *__pyx_f_5xabba_7inverse_inv_compress(__Pyx_memviewslice __pyx_v
   __Pyx_DECREF_SET(__pyx_v_time_series, ((PyObject*)__pyx_t_1));
   __pyx_t_1 = 0;
 
-  /* "xabba/inverse.pyx":140
+  /* "llmabba/inverse.pyx":140
  * 
  *     # stitch linear piece onto last
  *     for j in range(1, len(pieces)):             # <<<<<<<<<<<<<<
@@ -20756,7 +20756,7 @@ static PyObject *__pyx_f_5xabba_7inverse_inv_compress(__Pyx_memviewslice __pyx_v
   for (__pyx_t_15 = 1; __pyx_t_15 < __pyx_t_14; __pyx_t_15+=1) {
     __pyx_v_j = __pyx_t_15;
 
-    /* "xabba/inverse.pyx":141
+    /* "llmabba/inverse.pyx":141
  *     # stitch linear piece onto last
  *     for j in range(1, len(pieces)):
  *         x = np.arange(0,pieces[j,0]+1)/(pieces[j,0])*(pieces[j,1] - pieces[j-1, 1])             # <<<<<<<<<<<<<<
@@ -20888,7 +20888,7 @@ static PyObject *__pyx_f_5xabba_7inverse_inv_compress(__Pyx_memviewslice __pyx_v
     __Pyx_DECREF_SET(__pyx_v_x, ((PyArrayObject *)__pyx_t_1));
     __pyx_t_1 = 0;
 
-    /* "xabba/inverse.pyx":142
+    /* "llmabba/inverse.pyx":142
  *     for j in range(1, len(pieces)):
  *         x = np.arange(0,pieces[j,0]+1)/(pieces[j,0])*(pieces[j,1] - pieces[j-1, 1])
  *         y = pieces[j-1, 1] + x             # <<<<<<<<<<<<<<
@@ -20938,7 +20938,7 @@ static PyObject *__pyx_f_5xabba_7inverse_inv_compress(__Pyx_memviewslice __pyx_v
     __Pyx_DECREF_SET(__pyx_v_y, ((PyArrayObject *)__pyx_t_2));
     __pyx_t_2 = 0;
 
-    /* "xabba/inverse.pyx":143
+    /* "llmabba/inverse.pyx":143
  *         x = np.arange(0,pieces[j,0]+1)/(pieces[j,0])*(pieces[j,1] - pieces[j-1, 1])
  *         y = pieces[j-1, 1] + x
  *         time_series = time_series + y[1:].tolist()             # <<<<<<<<<<<<<<
@@ -20980,7 +20980,7 @@ static PyObject *__pyx_f_5xabba_7inverse_inv_compress(__Pyx_memviewslice __pyx_v
     __pyx_t_3 = 0;
   }
 
-  /* "xabba/inverse.pyx":145
+  /* "llmabba/inverse.pyx":145
  *         time_series = time_series + y[1:].tolist()
  * 
  *     return time_series             # <<<<<<<<<<<<<<
@@ -20990,7 +20990,7 @@ static PyObject *__pyx_f_5xabba_7inverse_inv_compress(__Pyx_memviewslice __pyx_v
   __pyx_r = __pyx_v_time_series;
   goto __pyx_L0;
 
-  /* "xabba/inverse.pyx":109
+  /* "llmabba/inverse.pyx":109
  * 
  * 
  * cpdef inv_compress(double[:, :] pieces, double start):             # <<<<<<<<<<<<<<
@@ -21011,7 +21011,7 @@ static PyObject *__pyx_f_5xabba_7inverse_inv_compress(__Pyx_memviewslice __pyx_v
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_x.rcbuffer->pybuffer);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_y.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("xabba.inverse.inv_compress", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("llmabba.inverse.inv_compress", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   goto __pyx_L2;
   __pyx_L0:;
@@ -21027,16 +21027,16 @@ static PyObject *__pyx_f_5xabba_7inverse_inv_compress(__Pyx_memviewslice __pyx_v
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5xabba_7inverse_7inv_compress(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_7llmabba_7inverse_7inv_compress(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_5xabba_7inverse_6inv_compress, "\n    Reconstruct time series from its first value `ts0` and its `pieces`.\n    `pieces` must have (at least) two columns, incremenent and window width, resp.\n    A window width w means that the piece ranges from s to s+w.\n    In particular, a window width of 1 is allowed.\n\n    Parameters\n    ----------\n    pieces - numpy array\n        Numpy array with three columns, each row contains increment, length,\n        error for the segment. Only the first two columns are required.\n\n    start - float\n        First element of original time series. Applies vertical shift in\n        reconstruction.\n\n    Returns\n    -------\n    time_series : Reconstructed time series\n    ");
-static PyMethodDef __pyx_mdef_5xabba_7inverse_7inv_compress = {"inv_compress", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_5xabba_7inverse_7inv_compress, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_5xabba_7inverse_6inv_compress};
-static PyObject *__pyx_pw_5xabba_7inverse_7inv_compress(PyObject *__pyx_self, 
+PyDoc_STRVAR(__pyx_doc_7llmabba_7inverse_6inv_compress, "\n    Reconstruct time series from its first value `ts0` and its `pieces`.\n    `pieces` must have (at least) two columns, incremenent and window width, resp.\n    A window width w means that the piece ranges from s to s+w.\n    In particular, a window width of 1 is allowed.\n\n    Parameters\n    ----------\n    pieces - numpy array\n        Numpy array with three columns, each row contains increment, length,\n        error for the segment. Only the first two columns are required.\n\n    start - float\n        First element of original time series. Applies vertical shift in\n        reconstruction.\n\n    Returns\n    -------\n    time_series : Reconstructed time series\n    ");
+static PyMethodDef __pyx_mdef_7llmabba_7inverse_7inv_compress = {"inv_compress", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_7llmabba_7inverse_7inv_compress, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_7llmabba_7inverse_6inv_compress};
+static PyObject *__pyx_pw_7llmabba_7inverse_7inv_compress(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -21122,11 +21122,11 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
     }
   }
   __PYX_XCLEAR_MEMVIEW(&__pyx_v_pieces, 1);
-  __Pyx_AddTraceback("xabba.inverse.inv_compress", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("llmabba.inverse.inv_compress", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_5xabba_7inverse_6inv_compress(__pyx_self, __pyx_v_pieces, __pyx_v_start);
+  __pyx_r = __pyx_pf_7llmabba_7inverse_6inv_compress(__pyx_self, __pyx_v_pieces, __pyx_v_start);
 
   /* function exit code */
   __PYX_XCLEAR_MEMVIEW(&__pyx_v_pieces, 1);
@@ -21140,7 +21140,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5xabba_7inverse_6inv_compress(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_pieces, double __pyx_v_start) {
+static PyObject *__pyx_pf_7llmabba_7inverse_6inv_compress(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_pieces, double __pyx_v_start) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -21150,7 +21150,7 @@ static PyObject *__pyx_pf_5xabba_7inverse_6inv_compress(CYTHON_UNUSED PyObject *
   __Pyx_RefNannySetupContext("inv_compress", 1);
   __Pyx_XDECREF(__pyx_r);
   if (unlikely(!__pyx_v_pieces.memview)) { __Pyx_RaiseUnboundLocalError("pieces"); __PYX_ERR(0, 109, __pyx_L1_error) }
-  __pyx_t_1 = __pyx_f_5xabba_7inverse_inv_compress(__pyx_v_pieces, __pyx_v_start, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 109, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_7llmabba_7inverse_inv_compress(__pyx_v_pieces, __pyx_v_start, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 109, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -21159,7 +21159,7 @@ static PyObject *__pyx_pf_5xabba_7inverse_6inv_compress(CYTHON_UNUSED PyObject *
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("xabba.inverse.inv_compress", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("llmabba.inverse.inv_compress", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -21304,7 +21304,7 @@ static PyType_Slot __pyx_type___pyx_array_slots[] = {
   {0, 0},
 };
 static PyType_Spec __pyx_type___pyx_array_spec = {
-  "xabba.inverse.array",
+  "llmabba.inverse.array",
   sizeof(struct __pyx_array_obj),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_SEQUENCE,
@@ -21350,7 +21350,7 @@ static PyBufferProcs __pyx_tp_as_buffer_array = {
 
 static PyTypeObject __pyx_type___pyx_array = {
   PyVarObject_HEAD_INIT(0, 0)
-  "xabba.inverse.""array", /*tp_name*/
+  "llmabba.inverse.""array", /*tp_name*/
   sizeof(struct __pyx_array_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_array, /*tp_dealloc*/
@@ -21513,7 +21513,7 @@ static PyType_Slot __pyx_type___pyx_MemviewEnum_slots[] = {
   {0, 0},
 };
 static PyType_Spec __pyx_type___pyx_MemviewEnum_spec = {
-  "xabba.inverse.Enum",
+  "llmabba.inverse.Enum",
   sizeof(struct __pyx_MemviewEnum_obj),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC,
@@ -21523,7 +21523,7 @@ static PyType_Spec __pyx_type___pyx_MemviewEnum_spec = {
 
 static PyTypeObject __pyx_type___pyx_MemviewEnum = {
   PyVarObject_HEAD_INIT(0, 0)
-  "xabba.inverse.""Enum", /*tp_name*/
+  "llmabba.inverse.""Enum", /*tp_name*/
   sizeof(struct __pyx_MemviewEnum_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_Enum, /*tp_dealloc*/
@@ -21823,7 +21823,7 @@ static PyType_Slot __pyx_type___pyx_memoryview_slots[] = {
   {0, 0},
 };
 static PyType_Spec __pyx_type___pyx_memoryview_spec = {
-  "xabba.inverse.memoryview",
+  "llmabba.inverse.memoryview",
   sizeof(struct __pyx_memoryview_obj),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC,
@@ -21869,7 +21869,7 @@ static PyBufferProcs __pyx_tp_as_buffer_memoryview = {
 
 static PyTypeObject __pyx_type___pyx_memoryview = {
   PyVarObject_HEAD_INIT(0, 0)
-  "xabba.inverse.""memoryview", /*tp_name*/
+  "llmabba.inverse.""memoryview", /*tp_name*/
   sizeof(struct __pyx_memoryview_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_memoryview, /*tp_dealloc*/
@@ -22024,7 +22024,7 @@ static PyType_Slot __pyx_type___pyx_memoryviewslice_slots[] = {
   {0, 0},
 };
 static PyType_Spec __pyx_type___pyx_memoryviewslice_spec = {
-  "xabba.inverse._memoryviewslice",
+  "llmabba.inverse._memoryviewslice",
   sizeof(struct __pyx_memoryviewslice_obj),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC|Py_TPFLAGS_SEQUENCE,
@@ -22034,7 +22034,7 @@ static PyType_Spec __pyx_type___pyx_memoryviewslice_spec = {
 
 static PyTypeObject __pyx_type___pyx_memoryviewslice = {
   PyVarObject_HEAD_INIT(0, 0)
-  "xabba.inverse.""_memoryviewslice", /*tp_name*/
+  "llmabba.inverse.""_memoryviewslice", /*tp_name*/
   sizeof(struct __pyx_memoryviewslice_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc__memoryviewslice, /*tp_dealloc*/
@@ -22222,6 +22222,8 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_kp_u_isenabled, __pyx_k_isenabled, sizeof(__pyx_k_isenabled), 0, 1, 0, 0},
     {&__pyx_n_s_itemsize, __pyx_k_itemsize, sizeof(__pyx_k_itemsize), 0, 0, 1, 1},
     {&__pyx_kp_s_itemsize_0_for_cython_array, __pyx_k_itemsize_0_for_cython_array, sizeof(__pyx_k_itemsize_0_for_cython_array), 0, 0, 1, 0},
+    {&__pyx_n_s_llmabba_inverse, __pyx_k_llmabba_inverse, sizeof(__pyx_k_llmabba_inverse), 0, 0, 1, 1},
+    {&__pyx_kp_s_llmabba_inverse_pyx, __pyx_k_llmabba_inverse_pyx, sizeof(__pyx_k_llmabba_inverse_pyx), 0, 0, 1, 0},
     {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
     {&__pyx_n_s_memview, __pyx_k_memview, sizeof(__pyx_k_memview), 0, 0, 1, 1},
     {&__pyx_n_s_mode, __pyx_k_mode, sizeof(__pyx_k_mode), 0, 0, 1, 1},
@@ -22276,8 +22278,6 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s_update, __pyx_k_update, sizeof(__pyx_k_update), 0, 0, 1, 1},
     {&__pyx_n_s_version_info, __pyx_k_version_info, sizeof(__pyx_k_version_info), 0, 0, 1, 1},
     {&__pyx_n_s_vstack, __pyx_k_vstack, sizeof(__pyx_k_vstack), 0, 0, 1, 1},
-    {&__pyx_n_s_xabba_inverse, __pyx_k_xabba_inverse, sizeof(__pyx_k_xabba_inverse), 0, 0, 1, 1},
-    {&__pyx_kp_s_xabba_inverse_pyx, __pyx_k_xabba_inverse_pyx, sizeof(__pyx_k_xabba_inverse_pyx), 0, 0, 1, 0},
     {0, 0, 0, 0, 0, 0, 0}
   };
   return __Pyx_InitStrings(__pyx_string_tab);
@@ -22364,7 +22364,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__10);
   __Pyx_GIVEREF(__pyx_tuple__10);
 
-  /* "xabba/inverse.pyx":70
+  /* "llmabba/inverse.pyx":70
  * 
  *     cdef np.ndarray[np.float64_t, ndim=2] pieces
  *     pieces = np.vstack([centers[alphabets.index(p)][:2] for p in strings])             # <<<<<<<<<<<<<<
@@ -22375,7 +22375,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_slice__11);
   __Pyx_GIVEREF(__pyx_slice__11);
 
-  /* "xabba/inverse.pyx":137
+  /* "llmabba/inverse.pyx":137
  *     x = np.arange(0,pieces[0,0]+1)/(pieces[0,0])*(pieces[0,1] - start)
  *     y = start + x
  *     time_series = time_series + y[1:].tolist()             # <<<<<<<<<<<<<<
@@ -22487,7 +22487,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__22);
   __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(1, 1, __pyx_L1_error)
 
-  /* "xabba/inverse.pyx":6
+  /* "llmabba/inverse.pyx":6
  * np.import_array()
  * 
  * @cython.boundscheck(False)             # <<<<<<<<<<<<<<
@@ -22497,9 +22497,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__24 = PyTuple_Pack(6, __pyx_n_s_strings, __pyx_n_s_centers, __pyx_n_s_alphabets, __pyx_n_s_start, __pyx_n_s_pieces, __pyx_n_s_time_series); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 6, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__24);
   __Pyx_GIVEREF(__pyx_tuple__24);
-  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(4, 0, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_xabba_inverse_pyx, __pyx_n_s_inv_transform, 6, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 6, __pyx_L1_error)
+  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(4, 0, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_llmabba_inverse_pyx, __pyx_n_s_inv_transform, 6, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 6, __pyx_L1_error)
 
-  /* "xabba/inverse.pyx":46
+  /* "llmabba/inverse.pyx":46
  * 
  * 
  * cpdef inv_digitize(list strings, np.ndarray[np.float64_t, ndim=2] centers, list alphabets):             # <<<<<<<<<<<<<<
@@ -22509,9 +22509,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__26 = PyTuple_Pack(3, __pyx_n_s_strings, __pyx_n_s_centers, __pyx_n_s_alphabets); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__26);
   __Pyx_GIVEREF(__pyx_tuple__26);
-  __pyx_codeobj__27 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__26, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_xabba_inverse_pyx, __pyx_n_s_inv_digitize, 46, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__27)) __PYX_ERR(0, 46, __pyx_L1_error)
+  __pyx_codeobj__27 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__26, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_llmabba_inverse_pyx, __pyx_n_s_inv_digitize, 46, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__27)) __PYX_ERR(0, 46, __pyx_L1_error)
 
-  /* "xabba/inverse.pyx":76
+  /* "llmabba/inverse.pyx":76
  * 
  * 
  * cpdef quantize(double[:, :] pieces):             # <<<<<<<<<<<<<<
@@ -22521,9 +22521,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__28 = PyTuple_Pack(1, __pyx_n_s_pieces); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(0, 76, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__28);
   __Pyx_GIVEREF(__pyx_tuple__28);
-  __pyx_codeobj__29 = (PyObject*)__Pyx_PyCode_New(1, 0, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__28, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_xabba_inverse_pyx, __pyx_n_s_quantize, 76, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__29)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __pyx_codeobj__29 = (PyObject*)__Pyx_PyCode_New(1, 0, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__28, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_llmabba_inverse_pyx, __pyx_n_s_quantize, 76, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__29)) __PYX_ERR(0, 76, __pyx_L1_error)
 
-  /* "xabba/inverse.pyx":109
+  /* "llmabba/inverse.pyx":109
  * 
  * 
  * cpdef inv_compress(double[:, :] pieces, double start):             # <<<<<<<<<<<<<<
@@ -22533,7 +22533,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__30 = PyTuple_Pack(2, __pyx_n_s_pieces, __pyx_n_s_start); if (unlikely(!__pyx_tuple__30)) __PYX_ERR(0, 109, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__30);
   __Pyx_GIVEREF(__pyx_tuple__30);
-  __pyx_codeobj__31 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__30, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_xabba_inverse_pyx, __pyx_n_s_inv_compress, 109, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__31)) __PYX_ERR(0, 109, __pyx_L1_error)
+  __pyx_codeobj__31 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__30, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_llmabba_inverse_pyx, __pyx_n_s_inv_compress, 109, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__31)) __PYX_ERR(0, 109, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -23085,14 +23085,14 @@ if (!__Pyx_RefNanny) {
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
-  if (__pyx_module_is_main_xabba__inverse) {
+  if (__pyx_module_is_main_llmabba__inverse) {
     if (PyObject_SetAttr(__pyx_m, __pyx_n_s_name_2, __pyx_n_s_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 1, __pyx_L1_error)
-    if (!PyDict_GetItemString(modules, "xabba.inverse")) {
-      if (unlikely((PyDict_SetItemString(modules, "xabba.inverse", __pyx_m) < 0))) __PYX_ERR(0, 1, __pyx_L1_error)
+    if (!PyDict_GetItemString(modules, "llmabba.inverse")) {
+      if (unlikely((PyDict_SetItemString(modules, "llmabba.inverse", __pyx_m) < 0))) __PYX_ERR(0, 1, __pyx_L1_error)
     }
   }
   #endif
@@ -23626,7 +23626,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_pyx_unpickle_Enum, __pyx_t_7) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "xabba/inverse.pyx":2
+  /* "llmabba/inverse.pyx":2
  * cimport cython
  * import numpy as np             # <<<<<<<<<<<<<<
  * cimport numpy as np
@@ -23637,7 +23637,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_7) < 0) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "xabba/inverse.pyx":4
+  /* "llmabba/inverse.pyx":4
  * import numpy as np
  * cimport numpy as np
  * np.import_array()             # <<<<<<<<<<<<<<
@@ -23646,7 +23646,7 @@ if (!__Pyx_RefNanny) {
  */
   __pyx_t_9 = __pyx_f_5numpy_import_array(); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 4, __pyx_L1_error)
 
-  /* "xabba/inverse.pyx":11
+  /* "llmabba/inverse.pyx":11
  * 
  * 
  * def inv_transform(list strings, np.ndarray[np.float64_t, ndim=2] centers, list alphabets, double start=0):             # <<<<<<<<<<<<<<
@@ -23656,7 +23656,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_7 = PyFloat_FromDouble(((double)0.0)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 11, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
 
-  /* "xabba/inverse.pyx":6
+  /* "llmabba/inverse.pyx":6
  * np.import_array()
  * 
  * @cython.boundscheck(False)             # <<<<<<<<<<<<<<
@@ -23668,50 +23668,50 @@ if (!__Pyx_RefNanny) {
   __Pyx_GIVEREF(__pyx_t_7);
   if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_7)) __PYX_ERR(0, 6, __pyx_L1_error);
   __pyx_t_7 = 0;
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5xabba_7inverse_1inv_transform, 0, __pyx_n_s_inv_transform, NULL, __pyx_n_s_xabba_inverse, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 6, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_7llmabba_7inverse_1inv_transform, 0, __pyx_n_s_inv_transform, NULL, __pyx_n_s_llmabba_inverse, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 6, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_7, __pyx_t_4);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_inv_transform, __pyx_t_7) < 0) __PYX_ERR(0, 6, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "xabba/inverse.pyx":46
+  /* "llmabba/inverse.pyx":46
  * 
  * 
  * cpdef inv_digitize(list strings, np.ndarray[np.float64_t, ndim=2] centers, list alphabets):             # <<<<<<<<<<<<<<
  *     """
  *     Convert symbolic representation back to compressed representation for reconstruction.
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5xabba_7inverse_3inv_digitize, 0, __pyx_n_s_inv_digitize, NULL, __pyx_n_s_xabba_inverse, __pyx_d, ((PyObject *)__pyx_codeobj__27)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 46, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_7llmabba_7inverse_3inv_digitize, 0, __pyx_n_s_inv_digitize, NULL, __pyx_n_s_llmabba_inverse, __pyx_d, ((PyObject *)__pyx_codeobj__27)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_inv_digitize, __pyx_t_7) < 0) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "xabba/inverse.pyx":76
+  /* "llmabba/inverse.pyx":76
  * 
  * 
  * cpdef quantize(double[:, :] pieces):             # <<<<<<<<<<<<<<
  *     """
  *     Realign window lengths with integer grid.
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5xabba_7inverse_5quantize, 0, __pyx_n_s_quantize, NULL, __pyx_n_s_xabba_inverse, __pyx_d, ((PyObject *)__pyx_codeobj__29)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_7llmabba_7inverse_5quantize, 0, __pyx_n_s_quantize, NULL, __pyx_n_s_llmabba_inverse, __pyx_d, ((PyObject *)__pyx_codeobj__29)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 76, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_quantize, __pyx_t_7) < 0) __PYX_ERR(0, 76, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "xabba/inverse.pyx":109
+  /* "llmabba/inverse.pyx":109
  * 
  * 
  * cpdef inv_compress(double[:, :] pieces, double start):             # <<<<<<<<<<<<<<
  *     """
  *     Reconstruct time series from its first value `ts0` and its `pieces`.
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_5xabba_7inverse_7inv_compress, 0, __pyx_n_s_inv_compress, NULL, __pyx_n_s_xabba_inverse, __pyx_d, ((PyObject *)__pyx_codeobj__31)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 109, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_7llmabba_7inverse_7inv_compress, 0, __pyx_n_s_inv_compress, NULL, __pyx_n_s_llmabba_inverse, __pyx_d, ((PyObject *)__pyx_codeobj__31)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 109, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_inv_compress, __pyx_t_7) < 0) __PYX_ERR(0, 109, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "xabba/inverse.pyx":1
+  /* "llmabba/inverse.pyx":1
  * cimport cython             # <<<<<<<<<<<<<<
  * import numpy as np
  * cimport numpy as np
@@ -23730,7 +23730,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_XDECREF(__pyx_t_7);
   if (__pyx_m) {
     if (__pyx_d && stringtab_initialized) {
-      __Pyx_AddTraceback("init xabba.inverse", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init llmabba.inverse", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     #if !CYTHON_USE_MODULE_STATE
     Py_CLEAR(__pyx_m);
@@ -23744,7 +23744,7 @@ if (!__Pyx_RefNanny) {
     }
     #endif
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init xabba.inverse");
+    PyErr_SetString(PyExc_ImportError, "init llmabba.inverse");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
