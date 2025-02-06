@@ -431,6 +431,7 @@ class LLMABBA:
 
         model_input.config.use_cache = False  # silence the warnings. Please re-enable for inference!
         trainer.train()
+        return self
 
 
     def inference(self, project_name, data, task, prompt, ft_model, model_tokenizer, scalar="z-score",
