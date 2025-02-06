@@ -3,17 +3,17 @@ LLM-ABBA
 
 |pip| |download status| |license| |download status2| 
 
-.. |pip| image:: https://img.shields.io/pypi/v/llm-abba?color=red
+.. |pip| image:: https://img.shields.io/pypi/v/llmabba?color=red
    :target: https://github.com/inEXASCALE/llm-abba
 
-.. |download status| image:: https://img.shields.io/pypi/v/llm-abba?color=red
+.. |download status| image:: https://img.shields.io/pypi/v/llmabba?color=red
    :target: /edit/master/README.rst
 
 .. |license| image:: https://anaconda.org/conda-forge/classixclustering/badges/license.svg
    :target: https://github.com/inEXASCALE/llm-abba/blob/master/LICENSE
 
-.. |download status2| image:: https://img.shields.io/pypi/dm/llm-abba.svg?label=PyPI%20downloads
-   :target: https://pypi.org/project/llm-abba/
+.. |download status2| image:: https://img.shields.io/pypi/dm/llmabba.svg?label=PyPI%20downloads
+   :target: https://pypi.org/project/llmabba/
 
 LLM-ABBA is an software framework designed for performing time series application using Large Language Models (LLMs) based on symbolic representation, as introduced in the paper:
 `LLM-ABBA: Symbolic Time Series Approximation using Large Language Models <https://arxiv.org/abs/2411.18506>`_.

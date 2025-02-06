@@ -1,6 +1,11 @@
 LICENSE
 README.rst
 setup.py
+llm_abba.egg-info/PKG-INFO
+llm_abba.egg-info/SOURCES.txt
+llm_abba.egg-info/dependency_links.txt
+llm_abba.egg-info/requires.txt
+llm_abba.egg-info/top_level.txt
 llmabba/__init__.py
 llmabba/abba.py
 llmabba/agg.pyx
@@ -11,11 +16,6 @@ llmabba/llmabba.py
 llmabba/models.py
 llmabba/process.py
 llmabba/quant.py
-llmabba.egg-info/PKG-INFO
-llmabba.egg-info/SOURCES.txt
-llmabba.egg-info/dependency_links.txt
-llmabba.egg-info/requires.txt
-llmabba.egg-info/top_level.txt
 llmabba/utils/__init__.py
 llmabba/utils/data_loader.py
 llmabba/utils/data_processor.py

@@ -1,6 +1,6 @@
 Metadata-Version: 2.2
-Name: llmabba
-Version: 0.0.2
+Name: llm-abba
+Version: 0.0.1
 Summary: LLM-ABBA: mining time series via symbolic approximation and large language models
 Home-page: https://github.com/inEXASCALE/llmabba
 Author: NA
