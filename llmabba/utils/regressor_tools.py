@@ -106,7 +106,7 @@ def create_regressor(regressor_name, input_shape, output_directory, verbose=1, i
         return LinearRegressor(output_directory, kwargs, type=regressor_name)
 
 
-def process_data(X, min_len, normalise=None):
+def process_data(X, min_len, scaler=None):
     """
     This is a function to process the data, i.e. convert dataframe to numpy array
     :param X:
@@ -139,16 +139,13 @@ def process_data(X, min_len, normalise=None):
         _y = _y[:min_len, :]
 
         # 4. normalise the series
-        if normalise == "standard":
-            scaler = StandardScaler().fit(_y)
-            _y = scaler.transform(_y)
-        if normalise == "minmax":
-            scaler = MinMaxScaler().fit(_y)
+        if scaler is not None:
+            scaler.fit(_y)
             _y = scaler.transform(_y)
 
         tmp.append(_y)
     X = np.array(tmp)
-    return X
+    return X, scaler
 
 
 def calculate_regression_metrics(y_true, y_pred, y_true_val=None, y_pred_val=None):

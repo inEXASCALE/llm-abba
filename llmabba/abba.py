@@ -94,8 +94,6 @@ def symbolsAssign(clusters, alphabet_set=0):
     # else:
     #     alphabets = alphabets[:N]
 
-    # /home/kangchen/.local/lib/python3.11/site-packages/fABBA/jabba/
-
     if N >= len(alphabets) and len(alphabets) == 32000:
         print("############################  Change the Alphabet  ############################")
         print("How many new alphabet needed : " + str(N - 32000))
@@ -261,7 +259,7 @@ class XABBA(object):
         self.recap_shape = None
         
         
-    def fit_transform(self, series, n_jobs=-1, alphabet_set=0, return_start_set=False):
+    def fit_transform(self, series, n_jobs=-1, alphabet_set=0, return_start_set=False, llm_split='Pre'):
         """
         Fitted the numerical series and transform them into symbolic representation.
         
@@ -510,7 +508,7 @@ class XABBA(object):
         
         
         
-    def transform(self, series, n_jobs=-1):
+    def transform(self, series, n_jobs=-1, llm_split='Pre'):
         """
         Transform multiple series (numerical sequences) to symbolic sequences.
         
@@ -564,7 +562,14 @@ class XABBA(object):
                         raise ValueError('Please enter the input with consistent dimensions.')
 
                 series = series.reshape(-1, int(np.prod(self.recap_shape[1:])))
-            
+
+
+            if llm_split == 'Pre':
+                series = series.reshape(-1, int(np.prod(self.recap_shape[1:])))
+            elif llm_split == 'Post':
+                series = series.reshape(-1, int(np.prod(np.shape(series)[1:])))
+
+
         string_sequences = list()
         start_set = list()
         if n_jobs != 1:
