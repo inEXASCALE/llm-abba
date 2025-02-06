@@ -6,8 +6,6 @@ LLM-ABBA
 .. |pip| image:: https://img.shields.io/pypi/v/llmabba?color=yellow
    :target: https://github.com/inEXASCALE/llm-abba
 
-.. |download status| image:: https://img.shields.io/pypi/dm/llmabba.svg?label=PyPI%20downloads
-   :target: /edit/master/README.rst
 
 .. |license| image:: https://anaconda.org/conda-forge/classixclustering/badges/license.svg
    :target: https://github.com/inEXASCALE/llm-abba/blob/master/LICENSE
