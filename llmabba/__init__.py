@@ -7,4 +7,4 @@ from .inverse import *
 
 from .llmabba import LLMABBA
 
-__name__ =  'llmabba'
+__name__ =  'llm-abba'
