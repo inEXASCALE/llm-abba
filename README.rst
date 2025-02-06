@@ -1,5 +1,6 @@
 LLM-ABBA
 ========
+|pip| 
 
 .. |pip| image:: https://img.shields.io/pypi/v/llm-abba?color=red
    :target: https://github.com/inEXASCALE/llm-abba
