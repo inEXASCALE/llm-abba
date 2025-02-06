@@ -3,10 +3,10 @@ LLM-ABBA
 
 |pip| |download status| |license| |download status2| 
 
-.. |pip| image:: https://img.shields.io/pypi/v/llmabba?color=orange
+.. |pip| image:: https://img.shields.io/pypi/v/llmabba?color=yellow
    :target: https://github.com/inEXASCALE/llm-abba
 
-.. |download status| image:: https://img.shields.io/pypi/v/llmabba?color=yellowgreen
+.. |download status| image:: https://img.shields.io/pypi/dm/llmabba
    :target: /edit/master/README.rst
 
 .. |license| image:: https://anaconda.org/conda-forge/classixclustering/badges/license.svg
