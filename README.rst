@@ -3,7 +3,7 @@ LLM-ABBA
 
 |pip| |license| 
 
-.. |pip| image:: https://img.shields.io/pypi/v/llmabba?color=yellow
+.. |pip| image:: https://img.shields.io/pypi/v/llmabba?color=lightsamon
    :target: https://github.com/inEXASCALE/llm-abba
 
 
