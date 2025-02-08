@@ -44,12 +44,8 @@ LLM-ABBA can be installed via pip:
 
 Usage
 -----
-Here is a simple example of how to use LLM-ABBA:
 
-.. code-block:: python
-
- 
-For more details, please refer to the documentation.
+For details of usage, please refer to the documentation and folder ``examples``.
 
 
 
