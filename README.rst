@@ -48,14 +48,24 @@ Here is a simple example of how to use LLM-ABBA:
 
 .. code-block:: python
 
-    from llm_abba import ABBA
+ 
+For more details, please refer to the documentation.
+
+
+
+LLM-ABBA uses quantized ABBA with fixed-point adaptive piecewise linear continuous approximation (FAPCA). One would like to independently try quantized ABBA (with FAPCA), we provide independent interface:
+
+.. code-block:: python
+
+   from llmabba import XABBA
 
     ts = [1.2, 1.4, 1.3, 1.8, 2.2, 2.4, 2.1]
-    symbolic_representation = ABBA.encode(ts)
+    abba = XABBA()
+    symbolic_representation = abba.fit_transform(ts)
 
     print("Symbolic Representation:", symbolic_representation)
 
-For more details, please refer to the documentation.
+
 
 Contributing
 ------------
