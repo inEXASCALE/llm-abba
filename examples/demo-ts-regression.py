@@ -2,11 +2,11 @@ import os
 import argparse
 import pandas as pd
 import numpy as np
-import llmabba.llmabba
+import llmabba
 # from data_loader import load_from_tsfile_to_dataframe
 # from regressor_tools import process_data, fit_regressor, calculate_regression_metrics
 # from sklearn import preprocessing
-from llmabba.llmabba import LLMABBA
+from llmabba import LLMABBA
 from llmabba.utils.data_loader import load_from_tsfile_to_dataframe
 from llmabba.utils.regressor_tools import process_data, fit_regressor, calculate_regression_metrics
 from sklearn.model_selection import train_test_split
