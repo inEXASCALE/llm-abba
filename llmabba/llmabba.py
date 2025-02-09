@@ -22,6 +22,19 @@ from datetime import datetime
 from datasets.dataset_dict import DatasetDict
 from datasets import Dataset
 
+
+class ABBA(XABBA):
+    def __init__(self, **args):
+        super().__init__(**args)
+
+    def encode(self, ts):
+        return self.fit_transform(ts)
+
+    def decode(self, strings)
+        return self.inverse_transform(strings)
+    
+
+    
 def save_abba(model, filename):
     pickle.dump(model, file = open(filename, "wb"))
 
