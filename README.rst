@@ -9,7 +9,7 @@ LLM-ABBA
 .. |pipd| image:: https://img.shields.io/pypi/dm/llmabba.svg?label=PyPI%20downloads
    :target: https://github.com/inEXASCALE/llm-abba
 
-.. |cython| image:: https://img.shields.io/badge/Cython_Support-Accelerated-blue?style=flat&logoColor=cyan&labelColor=cyan&color=pink
+.. |cython| image:: https://img.shields.io/badge/Cython_Support-Accelerated-blue?style=flat&logoColor=cyan&labelColor=cyan&color=green
    :target: https://github.com/inEXASCALE/llm-abba
 
 
