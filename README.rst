@@ -53,7 +53,7 @@ LLM-ABBA uses quantized ABBA with fixed-point adaptive piecewise linear continuo
 
 .. code-block:: python
 
-   from llmabba import XABBA
+   from llmabba import ABBA
 
     ts = [[1.2, 1.4, 1.3, 1.8, 2.2, 2.4, 2.1], [1, 2, 3, 4]]
     abba = ABBA()

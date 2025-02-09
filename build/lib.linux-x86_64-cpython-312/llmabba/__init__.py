@@ -1,4 +1,4 @@
-__version__ = '0.0.3'
+__version__ = '0.0.2'
 from .abba import ABBA, XABBA, fastXABBA, fastXABBA_len, fastXABBA_inc
 
 from .comp import compress
