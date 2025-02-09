@@ -1,10 +1,14 @@
 LLM-ABBA
 ========
 
-|pip| |cython| |license| 
+|pip| |pipd| |cython| |license| 
 
 .. |pip| image:: https://img.shields.io/pypi/v/llmabba?color=lightsalmon
    :target: https://github.com/inEXASCALE/llm-abba
+
+.. |pipd| image:: https://img.shields.io/pypi/dm/llmabba.svg?label=PyPI%20downloads
+   :target: https://github.com/inEXASCALE/llm-abba
+
 
 .. |cython| image:: https://img.shields.io/badge/Compiler-8A2BE2?label=Cython-Accelerated
    :target: https://github.com/inEXASCALE/llm-abba
