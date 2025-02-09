@@ -10,7 +10,7 @@ LLM-ABBA
    :target: https://github.com/inEXASCALE/llm-abba
 
 
-.. |cython| image:: https://img.shields.io/badge/Compiler-8A2BE2?label=Cython-Accelerated
+.. |cython| image:: https://img.shields.io/badge/Cython_support-accelerated-blue?style=for-the-badge&logoColor=cyan&labelColor=cyan&color=yellow
    :target: https://github.com/inEXASCALE/llm-abba
 
 
