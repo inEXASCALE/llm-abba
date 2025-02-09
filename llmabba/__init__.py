@@ -6,5 +6,6 @@ from .agg import aggregate
 from .inverse import *
 
 from .llmabba import LLMABBA
+from .llmabba import ABBA
 
 __name__ =  'llmabba'
