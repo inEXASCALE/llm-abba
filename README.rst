@@ -54,12 +54,13 @@ LLM-ABBA uses quantized ABBA with fixed-point adaptive piecewise linear continuo
 .. code-block:: python
 
    from llmabba import ABBA
-
-    ts = [[1.2, 1.4, 1.3, 1.8, 2.2, 2.4, 2.1], [1, 2, 3, 4]]
-    abba = ABBA()
-    symbolic_representation = abba.encode(ts)
-    print("Symbolic Representation:", symbolic_representation)
-    reconstruction = abba.decode(symbolic_representation)
+   
+   ts = [[1.2, 1.4, 1.3, 1.8, 2.2, 2.4, 2.1], [1.2,  1.3, 1.2, 2.2, 1.4, 2.4, 2.1]]
+   abba = ABBA(tol=0.1, alpha=0.1)
+   symbolic_representation = abba.encode(ts)
+   print("Symbolic Representation:", symbolic_representation)
+   reconstruction = abba.decode(symbolic_representation)
+   print("Reconstruction:", reconstruction)
 
 
 
