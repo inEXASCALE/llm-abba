@@ -44,7 +44,7 @@ LLM-ABBA can be installed via pip:
 
 .. code-block:: bash
 
-    pip install llm-abba
+    pip install llmabba
 
 
 
