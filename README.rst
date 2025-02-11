@@ -71,7 +71,7 @@ For details of usage, please refer to the documentation and folder ``examples``.
 
 
 
-LLM-ABBA uses quantized ABBA with fixed-point adaptive piecewise linear continuous approximation (FAPCA). One would like to independently try quantized ABBA (with FAPCA), we provide independent interface:
+``llmabba`` uses quantized ABBA with fixed-point adaptive piecewise linear continuous approximation (FAPCA). One would like to independently try quantized ABBA (with FAPCA), we provide independent interface:
 
 .. code-block:: python
 
