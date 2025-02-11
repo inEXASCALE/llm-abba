@@ -42,14 +42,18 @@ Installation
 ------------
 To set up virtual environment, there are two ways to setup virtual enviroment for testing ``llmabba``, the first one is:
 
-mkdir ~/.myenv
-python -m venv ~/.myenv
-source ~/.myenv/bin/activate
+.. code-block:: bash
+
+   mkdir ~/.myenv
+   python -m venv ~/.myenv
+   source ~/.myenv/bin/activate
 
 The second one is via conda:
 
-conda create -n myenv
-conda activate myenv
+.. code-block:: bash
+
+   conda create -n myenv
+   conda activate myenv
 
 
 Then, ``llmabba`` can be installed via pip:
