@@ -26,7 +26,7 @@ Time series analysis often involves identifying patterns, trends, and structures
 
 - **Higher accuracy and compression**: ``llmabba`` achieves better symbolic representations by leveraging LLMs' ability to understand and generate sequences, resulting in higher data compression and more accurate representation of underlying patterns.
 - **Adaptability**: The use of LLMs enables the framework to adapt to various types of time series data, allowing for robust performance across different domains such as finance, healthcare, and environmental science.
-- **Scalability**: ``llmabba``is designed to efficiently handle large-scale time series datasets, making it suitable for both small and big data applications.
+- **Scalability**: ``llmabba`` is designed to efficiently handle large-scale time series datasets, making it suitable for both small and big data applications.
 - **Automatic feature discovery**: By harnessing the power of LLMs, ``llmabba`` can discover novel features and patterns in time series data that traditional symbolic approaches might miss.
 
 In summary, ``llmabba`` represents a significant advancement in symbolic time series analysis, combining the power of modern machine learning techniques with established methods to offer enhanced compression, pattern recognition, and interpretability.
