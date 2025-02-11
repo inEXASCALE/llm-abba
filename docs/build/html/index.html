@@ -1,0 +1,279 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to LLM-ABBA’s documentation! &mdash; llmabba 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=53e15035" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            llmabba
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">llmabba</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Welcome to LLM-ABBA’s documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome-to-llm-abba-s-documentation">
+<h1>Welcome to LLM-ABBA’s documentation!<a class="headerlink" href="#welcome-to-llm-abba-s-documentation" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://github.com/inEXASCALE/llm-abba"><img alt="pip" src="https://img.shields.io/pypi/v/llmabba?color=lightsalmon" /></a> <a class="reference external" href="https://github.com/inEXASCALE/llm-abba"><img alt="pipd" src="https://img.shields.io/pypi/dm/llmabba.svg?label=PyPI%20downloads" /></a> <a class="reference external" href="https://github.com/inEXASCALE/llm-abba"><img alt="cython" src="https://img.shields.io/badge/Cython_Support-Accelerated-blue?style=flat&amp;logoColor=cyan&amp;labelColor=cyan&amp;color=black" /></a> <a class="reference external" href="https://github.com/inEXASCALE/llm-abba/blob/master/LICENSE"><img alt="license" src="https://anaconda.org/conda-forge/classixclustering/badges/license.svg" /></a></p>
+<p><code class="docutils literal notranslate"><span class="pre">llmabba</span></code> is an software framework designed for performing time series application using Large Language Models (LLMs) based on symbolic representation, as introduced in the paper:
+<a class="reference external" href="https://arxiv.org/abs/2411.18506">LLM-ABBA: Symbolic Time Series Approximation using Large Language Models</a>.</p>
+<p>Time series analysis often involves identifying patterns, trends, and structures within sequences of data points. Traditional methods, such as discrete wavelet transforms or symbolic aggregate approximation (SAX), have demonstrated success in converting continuous time series into symbolic representations, facilitating better analysis and compression. However, these methods are often limited in their ability to capture complex and subtle patterns.</p>
+<p><code class="docutils literal notranslate"><span class="pre">llmabba</span></code> builds upon these techniques by incorporating the power of large language models, which have been shown to excel in pattern recognition and sequence prediction tasks. By applying LLMs to symbolic time series representation, <code class="docutils literal notranslate"><span class="pre">llmabba</span></code> is able to automatically discover rich, meaningful representations of time series data. This approach offers several advantages:</p>
+<ul class="simple">
+<li><p><strong>Higher accuracy and compression</strong>: <code class="docutils literal notranslate"><span class="pre">llmabba</span></code> achieves better symbolic representations by leveraging LLMs’ ability to understand and generate sequences, resulting in higher data compression and more accurate representation of underlying patterns.</p></li>
+<li><p><strong>Adaptability</strong>: The use of LLMs enables the framework to adapt to various types of time series data, allowing for robust performance across different domains such as finance, healthcare, and environmental science.</p></li>
+<li><p><strong>Scalability</strong>: <a href="#id1"><span class="problematic" id="id2">``</span></a>llmabba``is designed to efficiently handle large-scale time series datasets, making it suitable for both small and big data applications.</p></li>
+<li><p><strong>Automatic feature discovery</strong>: By harnessing the power of LLMs, <code class="docutils literal notranslate"><span class="pre">llmabba</span></code> can discover novel features and patterns in time series data that traditional symbolic approaches might miss.</p></li>
+</ul>
+<p>In summary, <code class="docutils literal notranslate"><span class="pre">llmabba</span></code> represents a significant advancement in symbolic time series analysis, combining the power of modern machine learning techniques with established methods to offer enhanced compression, pattern recognition, and interpretability.</p>
+<section id="key-features">
+<h2>Key Features<a class="headerlink" href="#key-features" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Symbolic Time Series Approximation</strong>: Converts time series data into symbolic representations.</p></li>
+<li><p><strong>LLM-Powered Encoding</strong>: Utilizes LLMs to enhance compression and pattern discovery.</p></li>
+<li><p><strong>Efficient and Scalable</strong>: Designed to work with large-scale time series datasets.</p></li>
+<li><p><strong>Flexible Integration</strong>: Compatible with various machine learning and statistical analysis workflows.</p></li>
+</ul>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>To set up virtual environment, there are two ways to setup virtual enviroment for testing <code class="docutils literal notranslate"><span class="pre">llmabba</span></code>, the first one is:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>~/.myenv
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>~/.myenv
+<span class="nb">source</span><span class="w"> </span>~/.myenv/bin/activate
+</pre></div>
+</div>
+<p>The second one is via conda:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>myenv
+conda<span class="w"> </span>activate<span class="w"> </span>myenv
+</pre></div>
+</div>
+<p>Then, <code class="docutils literal notranslate"><span class="pre">llmabba</span></code> can be installed via pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>llmabba
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<p>For details of usage, please refer to the documentation and folder <code class="docutils literal notranslate"><span class="pre">examples</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">llmabba</span></code> uses quantized ABBA with fixed-point adaptive piecewise linear continuous approximation (FAPCA). One would like to independently try quantized ABBA (with FAPCA), we provide independent interface:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">llmabba</span> <span class="kn">import</span> <span class="n">ABBA</span>
+
+<span class="n">ts</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.4</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.2</span><span class="p">,</span>  <span class="mf">1.3</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">1.4</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">,</span> <span class="mf">2.1</span><span class="p">]]</span>
+<span class="n">abba</span> <span class="o">=</span> <span class="n">ABBA</span><span class="p">(</span><span class="n">tol</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">symbolic_representation</span> <span class="o">=</span> <span class="n">abba</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Symbolic Representation:&quot;</span><span class="p">,</span> <span class="n">symbolic_representation</span><span class="p">)</span>
+<span class="n">reconstruction</span> <span class="o">=</span> <span class="n">abba</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">symbolic_representation</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reconstruction:&quot;</span><span class="p">,</span> <span class="n">reconstruction</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more details, please refer to the documentation in [examples](./examples).</p>
+<p>If you are doing a time series classification task,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">llmabba.llmabba</span>
+<span class="kn">from</span> <span class="nn">llmabba.llmabba</span> <span class="kn">import</span> <span class="n">LLMABBA</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="c1">## Define the project name, task, model name, and prompt.</span>
+<span class="n">project_name</span> <span class="o">=</span> <span class="s2">&quot;PTBDB&quot;</span>
+<span class="n">task_tpye</span> <span class="o">=</span> <span class="s2">&quot;classification&quot;</span>  <span class="c1"># classification, regression or forecasting</span>
+<span class="n">model_name</span> <span class="o">=</span> <span class="s1">&#39;mistralai/Mistral-7B-Instruct-v0.1&#39;</span>
+<span class="n">prompt_input</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;This is a classification task. Identify the &quot;ECG Abnormality&quot; according to the given &quot;Symbolic Series&quot;.&quot;&quot;&quot;</span>
+
+<span class="c1">## Process the time series data and splite the datasets</span>
+<span class="n">abnormal_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../test_data/ptbdb_abnormal.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">normal_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../test_data/ptbdb_normal.csv&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="n">abnormal_length</span> <span class="o">=</span> <span class="n">abnormal_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">normal_length</span> <span class="o">=</span> <span class="n">normal_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">Y_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">abnormal_length</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="n">normal_length</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">X_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">abnormal_df</span><span class="p">,</span> <span class="n">normal_df</span><span class="p">])</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+<span class="n">arranged_seq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Y_data</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">Y_data</span><span class="p">))</span>
+<span class="n">train_data_split</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;X_data&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Y_data&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
+
+<span class="n">train_data</span><span class="p">,</span> <span class="n">test_data</span><span class="p">,</span> <span class="n">train_target</span><span class="p">,</span> <span class="n">test_target</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X_data</span><span class="p">[</span><span class="n">arranged_seq</span><span class="p">,</span> <span class="p">:],</span> <span class="n">Y_data</span><span class="p">[</span><span class="n">arranged_seq</span><span class="p">],</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="n">train_data_split</span><span class="p">[</span><span class="s1">&#39;X_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_data</span><span class="p">[:</span><span class="mi">500</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">train_data_split</span><span class="p">[</span><span class="s1">&#39;Y_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_target</span><span class="p">[:</span><span class="mi">500</span><span class="p">]</span>
+
+<span class="c1">## Using LLM-ABBA package to train the data with QLoRA</span>
+<span class="n">LLMABBA_classification</span> <span class="o">=</span> <span class="n">LLMABBA</span><span class="p">()</span>
+<span class="n">model_input</span><span class="p">,</span> <span class="n">model_tokenizer</span> <span class="o">=</span> <span class="n">LLMABBA_classification</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span> <span class="n">max_len</span><span class="o">=</span><span class="mi">2048</span><span class="p">)</span>
+
+<span class="n">tokenized_train_dataset</span><span class="p">,</span> <span class="n">tokenized_val_dataset</span> <span class="o">=</span> <span class="n">LLMABBA_classification</span><span class="o">.</span><span class="n">process</span><span class="p">(</span>
+      <span class="n">project_name</span><span class="o">=</span><span class="n">project_name</span><span class="p">,</span>
+      <span class="n">data</span><span class="o">=</span><span class="n">train_data_split</span><span class="p">,</span>
+      <span class="n">task</span><span class="o">=</span><span class="n">task_tpye</span><span class="p">,</span>
+      <span class="n">prompt</span><span class="o">=</span><span class="n">prompt_input</span><span class="p">,</span>
+      <span class="n">alphabet_set</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+      <span class="n">model_tokenizer</span><span class="o">=</span><span class="n">model_tokenizer</span><span class="p">,</span>
+      <span class="n">scalar</span><span class="o">=</span><span class="s2">&quot;z-score&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">LLMABBA_classification</span><span class="o">.</span><span class="n">train</span><span class="p">(</span>
+      <span class="n">model_input</span><span class="o">=</span><span class="n">model_input</span><span class="p">,</span>
+      <span class="n">num_epochs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+      <span class="n">output_dir</span><span class="o">=</span><span class="s1">&#39;../save/&#39;</span><span class="p">,</span>
+      <span class="n">train_dataset</span><span class="o">=</span><span class="n">tokenized_train_dataset</span><span class="p">,</span>
+      <span class="n">val_dataset</span><span class="o">=</span><span class="n">tokenized_val_dataset</span>
+<span class="p">)</span>
+
+
+<span class="c1">##If you finished the training, YOU CAN *Directly* do the inference with LLM-ABBA</span>
+<span class="n">test_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">test_data</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">peft_model_input</span><span class="p">,</span> <span class="n">model_tokenizer</span> <span class="o">=</span> <span class="n">LLMABBA_classification</span><span class="o">.</span><span class="n">model</span><span class="p">(</span>
+   <span class="n">peft_file</span><span class="o">=</span><span class="s1">&#39;../llm-abba-master/save/checkpoint-25/&#39;</span><span class="p">,</span>
+   <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span>
+   <span class="n">max_len</span><span class="o">=</span><span class="mi">2048</span><span class="p">)</span>
+
+<span class="n">out_text</span> <span class="o">=</span> <span class="n">LLMABBA_classification</span><span class="o">.</span><span class="n">inference</span><span class="p">(</span>
+   <span class="n">project_name</span><span class="o">=</span><span class="n">project_name</span><span class="p">,</span>
+   <span class="n">data</span><span class="o">=</span><span class="n">test_data</span><span class="p">,</span>
+   <span class="n">task</span><span class="o">=</span><span class="n">task_tpye</span><span class="p">,</span>
+   <span class="n">prompt</span><span class="o">=</span><span class="n">prompt_input</span><span class="p">,</span>
+   <span class="n">ft_model</span><span class="o">=</span><span class="n">peft_model_input</span><span class="p">,</span>
+   <span class="n">model_tokenizer</span><span class="o">=</span><span class="n">model_tokenizer</span><span class="p">,</span>
+   <span class="n">scalar</span><span class="o">=</span><span class="s2">&quot;z-score&quot;</span><span class="p">,</span>
+   <span class="n">llm_max_length</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span>
+   <span class="n">llm_repetition_penalty</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span>
+   <span class="n">llm_temperature</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+   <span class="n">llm_max_new_tokens</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">out_text</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="visualization">
+<h2>Visualization<a class="headerlink" href="#visualization" title="Link to this heading"></a></h2>
+<p>Under developing…</p>
+</section>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h2>
+<p>We welcome contributions! If you’d like to improve LLM-ABBA, please follow these steps:</p>
+<ol class="arabic simple">
+<li><p>Fork the repository.</p></li>
+<li><p>Create a new branch for your feature or bugfix.</p></li>
+<li><p>Submit a pull request.</p></li>
+</ol>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
+<p>LLM-ABBA is released under the MIT License.</p>
+</section>
+<section id="contact">
+<h2>Contact<a class="headerlink" href="#contact" title="Link to this heading"></a></h2>
+<p>For questions or feedback, please reach out via GitHub issues or contact the authors of the paper.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<p>[1]Carson, E., Chen, X., and Kang, C., “: Understanding time series via symbolic approximation”, arXiv e-prints, arXiv:2411.18506, 2024. doi:10.48550/arXiv.2411.18506.</p>
+<div class="admonition-note admonition">
+<p class="admonition-title">Note</p>
+<p>The documentation is still on going. We welcome the contributions in any forms.</p>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Erin Carson, Xinye Chen, and Cheng Kang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
