@@ -1,7 +1,7 @@
 LLM-ABBA
 ========
 
-|pip| |pipd| |cython| |license| 
+|pip| |pipd| |cython| |Documentation Status| |license| 
 
 .. |pip| image:: https://img.shields.io/pypi/v/llmabba?color=lightsalmon
    :target: https://github.com/inEXASCALE/llm-abba
