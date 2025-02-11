@@ -17,19 +17,19 @@ LLM-ABBA
    :target: https://github.com/inEXASCALE/llm-abba/blob/master/LICENSE
 
 
-LLM-ABBA is an software framework designed for performing time series application using Large Language Models (LLMs) based on symbolic representation, as introduced in the paper:
+``llmabba`` is an software framework designed for performing time series application using Large Language Models (LLMs) based on symbolic representation, as introduced in the paper:
 `LLM-ABBA: Symbolic Time Series Approximation using Large Language Models <https://arxiv.org/abs/2411.18506>`_.
 
 Time series analysis often involves identifying patterns, trends, and structures within sequences of data points. Traditional methods, such as discrete wavelet transforms or symbolic aggregate approximation (SAX), have demonstrated success in converting continuous time series into symbolic representations, facilitating better analysis and compression. However, these methods are often limited in their ability to capture complex and subtle patterns.
 
-LLM-ABBA builds upon these techniques by incorporating the power of large language models, which have been shown to excel in pattern recognition and sequence prediction tasks. By applying LLMs to symbolic time series representation, LLM-ABBA is able to automatically discover rich, meaningful representations of time series data. This approach offers several advantages:
+``llmabba`` builds upon these techniques by incorporating the power of large language models, which have been shown to excel in pattern recognition and sequence prediction tasks. By applying LLMs to symbolic time series representation, ``llmabba`` is able to automatically discover rich, meaningful representations of time series data. This approach offers several advantages:
 
-- **Higher accuracy and compression**: LLM-ABBA achieves better symbolic representations by leveraging LLMs' ability to understand and generate sequences, resulting in higher data compression and more accurate representation of underlying patterns.
+- **Higher accuracy and compression**: ``llmabba`` achieves better symbolic representations by leveraging LLMs' ability to understand and generate sequences, resulting in higher data compression and more accurate representation of underlying patterns.
 - **Adaptability**: The use of LLMs enables the framework to adapt to various types of time series data, allowing for robust performance across different domains such as finance, healthcare, and environmental science.
-- **Scalability**: LLM-ABBA is designed to efficiently handle large-scale time series datasets, making it suitable for both small and big data applications.
+- **Scalability**: ``llmabba``is designed to efficiently handle large-scale time series datasets, making it suitable for both small and big data applications.
 - **Automatic feature discovery**: By harnessing the power of LLMs, LLM-ABBA can discover novel features and patterns in time series data that traditional symbolic approaches might miss.
 
-In summary, LLM-ABBA represents a significant advancement in symbolic time series analysis, combining the power of modern machine learning techniques with established methods to offer enhanced compression, pattern recognition, and interpretability.
+In summary, ``llmabba`` represents a significant advancement in symbolic time series analysis, combining the power of modern machine learning techniques with established methods to offer enhanced compression, pattern recognition, and interpretability.
 
 Key Features
 ------------
@@ -40,7 +40,19 @@ Key Features
 
 Installation
 ------------
-LLM-ABBA can be installed via pip:
+To set up virtual environment, there are two ways to setup virtual enviroment for testing ``llmabba``, the first one is:
+
+mkdir ~/.myenv
+python -m venv ~/.myenv
+source ~/.myenv/bin/activate
+
+The second one is via conda:
+
+conda create -n myenv
+conda activate myenv
+
+
+Then, ``llmabba`` can be installed via pip:
 
 .. code-block:: bash
 
