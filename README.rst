@@ -12,6 +12,9 @@ LLM-ABBA
 .. |cython| image:: https://img.shields.io/badge/Cython_Support-Accelerated-blue?style=flat&logoColor=cyan&labelColor=cyan&color=black
    :target: https://github.com/inEXASCALE/llm-abba
 
+.. |Documentation Status| image:: https://readthedocs.org/projects/llm-abba/badge/?version=latest
+   :target: https://llm-abba.readthedocs.io/en/latest/
+
 
 .. |license| image:: https://anaconda.org/conda-forge/classixclustering/badges/license.svg
    :target: https://github.com/inEXASCALE/llm-abba/blob/master/LICENSE
