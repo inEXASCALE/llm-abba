@@ -1,6 +1,22 @@
 LLM-ABBA
 ========
 
+|pip| |pipd| |cython| |license| 
+
+.. |pip| image:: https://img.shields.io/pypi/v/llmabba?color=lightsalmon
+   :target: https://github.com/inEXASCALE/llm-abba
+
+.. |pipd| image:: https://img.shields.io/pypi/dm/llmabba.svg?label=PyPI%20downloads
+   :target: https://github.com/inEXASCALE/llm-abba
+
+.. |cython| image:: https://img.shields.io/badge/Cython_Support-Accelerated-blue?style=flat&logoColor=cyan&labelColor=cyan&color=black
+   :target: https://github.com/inEXASCALE/llm-abba
+
+
+.. |license| image:: https://anaconda.org/conda-forge/classixclustering/badges/license.svg
+   :target: https://github.com/inEXASCALE/llm-abba/blob/master/LICENSE
+
+
 LLM-ABBA is an software framework designed for performing time series application using Large Language Models (LLMs) based on symbolic representation, as introduced in the paper:
 `LLM-ABBA: Symbolic Time Series Approximation using Large Language Models <https://arxiv.org/abs/2411.18506>`_.
 
@@ -28,22 +44,31 @@ LLM-ABBA can be installed via pip:
 
 .. code-block:: bash
 
-    pip install llm-abba
+    pip install llmabba
 
 
 
 Usage
 -----
-Here is a simple example of how to use LLM-ABBA:
+
+For details of usage, please refer to the documentation and folder ``examples``.
+
+
+
+LLM-ABBA uses quantized ABBA with fixed-point adaptive piecewise linear continuous approximation (FAPCA). One would like to independently try quantized ABBA (with FAPCA), we provide independent interface:
 
 .. code-block:: python
 
-    from llm_abba import ABBA
+   from llmabba import ABBA
+   
+   ts = [[1.2, 1.4, 1.3, 1.8, 2.2, 2.4, 2.1], [1.2,  1.3, 1.2, 2.2, 1.4, 2.4, 2.1]]
+   abba = ABBA(tol=0.1, alpha=0.1)
+   symbolic_representation = abba.encode(ts)
+   print("Symbolic Representation:", symbolic_representation)
+   reconstruction = abba.decode(symbolic_representation)
+   print("Reconstruction:", reconstruction)
 
-    ts = [1.2, 1.4, 1.3, 1.8, 2.2, 2.4, 2.1]
-    symbolic_representation = ABBA.encode(ts)
 
-    print("Symbolic Representation:", symbolic_representation)
 
 For more details, please refer to the documentation in [examples](./examples).
 

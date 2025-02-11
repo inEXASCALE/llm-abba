@@ -66,7 +66,6 @@ setup_args = {'name': __package__,
                                    "accelerate",
                                    "matplotlib"],
 
-              'packages': {__package__},
               'package_data': {__package__: [__package__]},
               'long_description': long_description,
               'author': "NA",
@@ -91,10 +90,10 @@ comp = Extension('llmabba.comp',
                  sources=[__package__ + '/comp.pyx'])
 
 agg = Extension('llmabba.agg',
-                sources=[__package__ + '/agg.pyx'])
+                sources=[__package__  + '/agg.pyx'])
 
 inverse = Extension('llmabba.inverse',
-                    sources=[__package__ + '/inverse.pyx'])
+                    sources=[__package__  + '/inverse.pyx'])
 
 try:
     setuptools.setup(
