@@ -68,7 +68,7 @@ setup_args = {'name': __package__,
 
               'package_data': {__package__: [__package__]},
               'long_description': long_description,
-              'author': "NA",
+              'author': "Erin Carson, Xinye Chen, Chen Kang",
               'author_email': "xinyechenai@email.com",
               'classifiers': [
                   "Intended Audience :: Science/Research",
