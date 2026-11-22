@@ -93,13 +93,9 @@ class QUANT():
             
         self.scaling, self.zpoint = self.compute_scaling(x_min, x_max, self.alpha_q, self.beta_q)
         
-        try:
-            x_q = self.quantization(x, self.scaling, self.zpoint)
-        except:
-            self.scaling, self.zpoint = self.compute_scaling(x_min, x_max+self.epsilon, self.alpha_q, self.beta_q)
-            x_q = self.quantization(x, self.scaling, self.zpoint)
-            
-        return x_q
+        if self.scaling == 0:
+            return np.zeros_like(x, dtype=self.intType)
+        return self.quantization(x, self.scaling, self.zpoint)
         
     def dequant(self, x_q):
         return self.dequantization(x_q, self.scaling, self.zpoint)
@@ -110,7 +106,7 @@ class QUANT():
         if self.clip_range is None:
             x_q = self.intType(clip_func(x_q, a_min=self.alpha_q, a_max=self.beta_q))
         else:
-            x_q = self.intType(clip_func(x_q, a_min=self.clip_range[0], a_max=self.beta_q[self.clip_range[1]]))
+            x_q = self.intType(clip_func(x_q, a_min=self.clip_range[0], a_max=self.clip_range[1]))
         
         return x_q
 
@@ -124,4 +120,4 @@ class QUANT():
         z = (alpha * beta_q - beta * alpha_q) / (beta_q - alpha_q)
 
         return s, z
-    
+

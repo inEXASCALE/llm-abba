@@ -114,6 +114,9 @@ def process_data(X, min_len, scaler=None):
     :param normalise:
     :return:
     """
+    min_len = int(min_len)
+    if min_len < 1 or X.empty:
+        raise ValueError("Expected nonempty series and a positive target length.")
     tmp = []
     for i in tqdm(range(len(X))):
         _x = X.iloc[i, :].copy(deep=True)
@@ -125,11 +128,15 @@ def process_data(X, min_len, scaler=None):
         # 2. adjust the length of each dimension
         _y = []
         for y in _x:
+            y = pd.Series(y, dtype=float)
             # 2.1 fill missing values
             if y.isnull().any():
                 y = y.interpolate(method='linear', limit_direction='both')
 
             # 2.2. if length of each dimension is different, uniformly scale the shorted one to the max length
+            y = np.asarray(y, dtype=float)
+            if not len(y):
+                raise ValueError("Each regression series must contain at least one value.")
             if len(y) < max_len:
                 y = uniform_scaling(y, max_len)
             _y.append(y)
@@ -137,14 +144,13 @@ def process_data(X, min_len, scaler=None):
 
         # 3. adjust the length of the series, chop of the longer series
         _y = _y[:min_len, :]
-
-        # 4. normalise the series
-        if scaler is not None:
-            scaler.fit(_y)
-            _y = scaler.transform(_y)
+        if len(_y) < min_len:
+            _y = np.pad(_y, ((0, min_len - len(_y)), (0, 0)), mode="edge")
 
         tmp.append(_y)
     X = np.array(tmp)
+    if scaler is not None:
+        X = scaler.fit_transform(X.reshape(-1, X.shape[-1])).reshape(X.shape)
     return X, scaler
 
 
@@ -158,7 +164,7 @@ def calculate_regression_metrics(y_true, y_pred, y_true_val=None, y_pred_val=Non
     :param y_pred_val:
     :return:
     """
-    res = pd.DataFrame(data=np.zeros((1, 2), dtype=np.float), index=[0],
+    res = pd.DataFrame(data=np.zeros((1, 2), dtype=float), index=[0],
                        columns=['rmse', 'mae'])
     res['rmse'] = math.sqrt(mean_squared_error(y_true, y_pred))
     res['mae'] = mean_absolute_error(y_true, y_pred)

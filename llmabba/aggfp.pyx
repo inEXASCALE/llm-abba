@@ -18,7 +18,7 @@ np.import_array()
 @cython.binding(True)
 
 
-cpdef aggregate(double[:,:] data, str sorting, double tol=0.5):
+cpdef aggregate(double[:,:] data, str sorting="norm", double tol=0.5):
     """aggregate the data
 
     Parameters
@@ -52,12 +52,12 @@ cpdef aggregate(double[:,:] data, str sorting, double tol=0.5):
     # cdef double[:] s1
     cdef double[:, :] cdata = np.empty((len_ind, fdim), dtype=np.float64)
     cdef double[:, :] U1, _  # = np.empty((len_ind, ), dtype=float)
-    cdef long[:] ind # = np.empty((len_ind, ), dtype=int)
+    cdef np.npy_intp[:] ind
     cdef Py_ssize_t sp # starting point index
     cdef unsigned int lab=0, num_group #, nr_dist=0
     cdef double[:] clustc # starting point coordinates
     cdef double dist
-    cdef long[:] labels = np.full(len_ind, -1, dtype=int) 
+    cdef np.npy_intp[:] labels = np.full(len_ind, -1, dtype=np.intp)
     cdef list splist = list() # list of starting points
     cdef Py_ssize_t i, ii, j, coord
     
@@ -67,16 +67,20 @@ cpdef aggregate(double[:,:] data, str sorting, double tol=0.5):
         sort_vals = np.linalg.norm(cdata, ord=2, axis=1)
         ind = np.argsort(sort_vals)
 
-    else: 
+    elif sorting == "pca":
         cdata = data - np.mean(data, axis=0)
-        if data.shape[1]>1:
-            U1, s1, _ = svds(cdata.base, k=1, return_singular_vectors=True)
+        if min(len_ind, fdim) > 1:
+            U1, s1, _ = svds(cdata.base, k=1, return_singular_vectors="u")
             sort_vals = U1[:,0]*s1[0]
         else:
             sort_vals = cdata[:,0]
             
         sort_vals = sort_vals*np.sign(-sort_vals[0]) # flip to enforce deterministic output
         ind = np.argsort(sort_vals)
+    else:
+        cdata[...] = data
+        sort_vals = np.zeros(len_ind)
+        ind = np.arange(len_ind, dtype=np.intp)
 
 
     for i in range(len_ind): 

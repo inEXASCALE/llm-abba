@@ -46,7 +46,7 @@ def aggregate(data, sorting="norm", tol=0.5):
         # change to svd 
         # cdata = data - data.mean(axis=0) -- already done in the clustering.fit_transform
         cdata = data - data.mean(axis=0)
-        if data.shape[1]>1:
+        if min(data.shape) > 1:
             U1, s1, _ = svds(cdata, k=1, return_singular_vectors="u")
             sort_vals = U1[:,0]*s1[0]
             # print( U1, s1, _)
@@ -56,6 +56,7 @@ def aggregate(data, sorting="norm", tol=0.5):
         ind = np.argsort(sort_vals)
 
     else: # no sorting
+        cdata = data
         sort_vals = np.zeros(len_ind)
         ind = np.arange(len_ind)
         

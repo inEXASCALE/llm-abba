@@ -8,7 +8,7 @@ np.import_array()
 @cython.binding(True)
 
     
-def inv_transform(list strings, np.ndarray[np.float64_t, ndim=2] centers, list alphabets, double start=0):
+def inv_transform(strings, np.ndarray[np.float64_t, ndim=2] centers, list alphabets, double start=0):
     """
     Convert ABBA symbolic representation back to numeric time series representation.
 
@@ -35,6 +35,8 @@ def inv_transform(list strings, np.ndarray[np.float64_t, ndim=2] centers, list a
         Reconstruction of the time series.
     """
 
+    if len(strings) == 0:
+        return [start]
     cdef double[:, :] pieces = inv_digitize(strings, centers, alphabets)
 
     pieces = quantize(pieces)
@@ -43,7 +45,7 @@ def inv_transform(list strings, np.ndarray[np.float64_t, ndim=2] centers, list a
 
 
 
-cpdef inv_digitize(list strings, np.ndarray[np.float64_t, ndim=2] centers, list alphabets):
+cpdef inv_digitize(strings, np.ndarray[np.float64_t, ndim=2] centers, list alphabets):
     """
     Convert symbolic representation back to compressed representation for reconstruction.
 
@@ -131,6 +133,8 @@ cpdef inv_compress(double[:, :] pieces, double start):
     cdef list time_series = [start]
     cdef Py_ssize_t j
     cdef np.ndarray[np.float64_t, ndim=1] x, y
+    if len(pieces) == 1 and pieces[0, 0] == 0:
+        return time_series
     
     x = np.arange(0,pieces[0,0]+1)/(pieces[0,0])*(pieces[0,1] - start)
     y = start + x

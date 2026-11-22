@@ -1,53 +1,42 @@
-from transformers import DataCollatorForLanguageModeling, DataCollatorWithPadding, AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig, Trainer, TrainingArguments
-from accelerate import FullyShardedDataParallelPlugin, Accelerator
-import math
-from torch.distributed.fsdp.fully_sharded_data_parallel import FullOptimStateDictConfig, FullStateDictConfig
-from peft import LoraConfig, PeftModel, prepare_model_for_kbit_training, get_peft_model, TaskType
-from sklearn import preprocessing
-import numpy as np
-from .xabba import XABBA
-import pickle
-import os
-import torch
-from peft import PeftModel
-from .utils.fundamentals import *
-from .utils.regressor_tools import process_data, fit_regressor, calculate_regression_metrics
-from sklearn.model_selection import train_test_split
 from datetime import datetime
-from datasets.dataset_dict import DatasetDict
+import math
+from pathlib import Path
+import pickle
+
+from accelerate import Accelerator, FullyShardedDataParallelPlugin
 from datasets import Dataset
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from peft import LoraConfig, PeftModel, TaskType, get_peft_model, prepare_model_for_kbit_training
+from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
+import torch
+from torch.distributed.fsdp.fully_sharded_data_parallel import FullOptimStateDictConfig, FullStateDictConfig
+from transformers import (
+    AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, DataCollatorWithPadding, Trainer, TrainingArguments,
+)
 
-torch.cuda.empty_cache()
+from .utils.fundamentals import mean
+from .utils.regressor_tools import process_data
+from .xabba import XABBA
 
 def save_abba(model, filename):
-    pickle.dump(model, file = open(filename, "wb"))
+    with open(filename, "wb") as file:
+        pickle.dump(model, file)
 
 
 def load_abba(filename):
-    return pickle.load(open(filename, "rb"))
+    with open(filename, "rb") as file:
+        return pickle.load(file)
 
 
-# Python program to convert a list to string
-def ListToString(s):
-    # initialize an empty string
-    str1 = ""
-    # traverse in the string
-    for ele in s:
-        str1 += ele + ' '
-    # return string
-    return str1
+def ListToString(symbols):
+    return " ".join(symbols)
 
 
-# Python program to convert a string to list
-def StringToList(s):
-    # initialize an empty string
-    str1 = []
-    # traverse in the string
-    for ele in range(int(len(s)/2)):
-        str1.append(s[ele*2])
-    # return string
-    return str1
+def StringToList(text):
+    return text.split()
 
 
 def cross_correlation(x, y):
@@ -110,6 +99,7 @@ class LLMABBA:
 
         self.modules_to_save = modules_to_save
         self.lora_dropout = lora_dropout
+        self.max_len = 2048
 
 
     def tokenize(self, prompt_input):
@@ -119,29 +109,44 @@ class LLMABBA:
             max_length=self.max_len,
             padding="max_length",
         )
-        result["labels"] = result["input_ids"].copy()
+        result["labels"] = [
+            token if mask else -100
+            for token, mask in zip(result["input_ids"], result["attention_mask"])
+        ]
         return result
 
     def build(self, data_point):
-        """Build the Prompt Data"""
-        full_prompt = f"""{self.prompt}
-        ### Symbolic Series: {data_point["text_inputs"]}
-        ### Results: {data_point["text_outputs"]}
-        """
-        return self.tokenize(full_prompt)
+        prompt = self._format_prompt(self.prompt, data_point["text_inputs"])
+        return self.tokenize(f'{prompt} {data_point["text_outputs"]}')
+
+    @staticmethod
+    def _format_prompt(prompt, symbols):
+        return f"{prompt}\n### Symbolic Series: {symbols}\n### Results:"
 
 
     def process(self, project_name, data, task, prompt, model_tokenizer,
-                seq_len_pre = 24, scalar="z-score",
-                seq_len_post = 24, alphabet_set=None, draw_ts = False)-> None:
-        """Load data and process data"""
+                seq_len_pre=24, scalar="z-score", seq_len_post=24, alphabet_set=None, draw_ts=False):
+        """Fit preprocessing on training data and return tokenized train and validation datasets."""
+        if scalar == "min-max":
+            self.scaler = preprocessing.MinMaxScaler()
+        elif scalar == "z-score":
+            self.scaler = preprocessing.StandardScaler()
+        else:
+            raise ValueError(f"Unknown scaler: {scalar!r}")
 
         if alphabet_set is None:
-            vocab_list = model_tokenizer.get_vocab()
-            alphabet_set = list(vocab_list.keys())
-            print("Using LLM tokens as the alphabet_set")
-        else:
-            print("Using self-defined alphabet_set")
+            special_tokens = set(getattr(model_tokenizer, "all_special_tokens", ()))
+            alphabet_set = [
+                token for token in model_tokenizer.get_vocab()
+                if token.isprintable() and not any(char.isspace() for char in token)
+                and token not in special_tokens and not any(marker in token for marker in "▁ĠĊ")
+            ]
+            if not alphabet_set:
+                alphabet_set = 0
+        elif isinstance(alphabet_set, list):
+            if any(not isinstance(token, str) or not token or any(char.isspace() for char in token)
+                   for token in alphabet_set):
+                raise ValueError("Custom alphabet symbols must be nonempty strings without whitespace.")
 
         self.project_name = project_name
         self.task = task
@@ -150,218 +155,104 @@ class LLMABBA:
         self.model_tokenizer = model_tokenizer
         self.seq_len_pre = seq_len_pre
         self.seq_len_post = seq_len_post
+        self.xabba = XABBA(
+            tol=self.abba_tol, init=self.abba_init, alpha=self.abba_alpha, scl=self.abba_scl,
+            bits_for_len=self.bits_for_len, bits_for_inc=self.bits_for_inc, verbose=self.abba_verbose,
+        )
 
-        # Initialize the StandardScaler
-        if scalar == "min-max":
-            self.scaler = preprocessing.MinMaxScaler(feature_range=(0, 1))
-        elif scalar == "z-score":
-            self.scaler =  preprocessing.StandardScaler()
-
-        # Initialize the ABBA block
-        self.xabba = XABBA(tol=self.abba_tol, init=self.abba_init,
-                           alpha=self.abba_alpha, scl=self.abba_scl, verbose=0)
-
-        if self.task == "classification":
-            # Fit the scaler to the training data and transform it
-            X_data = self.scaler.fit_transform(data['X_data'])
-            Y_data = data['Y_data']
-
-            symbols = self.xabba.fit_transform(X_data, alphabet_set=self.alphabet_set)
-            if draw_ts is True:
-                reconstruction = self.xabba.inverse_transform(symbols)
-                reconst_same_shape = self.xabba.recast_shape(reconstruction)  # recast into original shape
-
-                plt.plot(X_data[0,:], label='Ground Truth')
-                plt.plot(reconst_same_shape[0.:], label='Reconstruction')
-
-                Cross_Correlation = cross_correlation(
-                    X_data[0,:],
-                    reconst_same_shape[0.:])
-                plt.rcParams.update({'font.size': 20})
-                # plt.title('Cross Correlation: ' + str("{:.3}".format(Cross_Correlation)), fontsize=20)
-                plt.title('A Classification Task Before LLM-ABBA', fontsize=20)
-                plt.xlabel('Inout Length', fontsize=20)
-                plt.ylabel('Feature', fontsize=20)
-
-                plt.legend()
-                plt.grid(True, axis='y')
-                plt.tight_layout()
-                # plt.savefig('Compression_Reproduction_img_S' + str(i_reconst) + '_Feature' + str(i_plot) + '.jpg')
-                plt.show()
-                # plt.close()
-                ##################################################################
-
-            symbols_convert = []
-            for i_data in range(len(symbols)):
-                symbols_convert.append(listToString(list(symbols[i_data])))
-
-            train_data_symbolic, val_data_symbolic, train_target_symbolic, val_target_symbolic = train_test_split(
-                symbols_convert, Y_data, test_size=0.2)
-
-
-        elif self.task == "regression":
-
-            # Fit the scaler to the training data and transform it
-            min_len = np.inf
-            for i in range(len(data['X_data'])):
-                x = data['X_data'].iloc[i, :]
-                all_len = [len(y) for y in x]
-                min_len = min(min(all_len), min_len)
-            # print("[{}] Minimum length: {}".format(module, min_len))
-
-            X_data, self.scaler = process_data(data['X_data'], scaler=self.scaler, min_len=min_len)
-            Y_data = data['Y_data']
-
-            symbols = self.xabba.fit_transform(X_data, alphabet_set=self.alphabet_set)
-            if draw_ts is True:
-                reconstruction = self.xabba.inverse_transform(symbols)
-                reconst_same_shape = self.xabba.recast_shape(reconstruction)  # recast into original shape
-
-                plt.plot(X_data[0,:], label='Ground Truth')
-                plt.plot(reconst_same_shape[0.:], label='Reconstruction')
-
-                Cross_Correlation = cross_correlation(
-                    X_data[0,:],
-                    reconst_same_shape[0.:])
-                plt.rcParams.update({'font.size': 20})
-                # plt.title('Cross Correlation: ' + str("{:.3}".format(Cross_Correlation)), fontsize=20)
-                plt.title('A Regression Task Before LLM-ABBA', fontsize=20)
-                plt.xlabel('Inout Length', fontsize=20)
-                plt.ylabel('Feature', fontsize=20)
-
-                plt.legend()
-                plt.grid(True, axis='y')
-                plt.tight_layout()
-                # plt.savefig('Compression_Reproduction_img_S' + str(i_reconst) + '_Feature' + str(i_plot) + '.jpg')
-                plt.show()
-                # plt.close()
-                ##################################################################
-
-
-            symbols_convert = []
-            for i_data in range(len(symbols)):
-                symbols_convert.append(listToString(list(symbols[i_data])))
-
-            train_data_symbolic, val_data_symbolic, train_target_symbolic, val_target_symbolic = train_test_split(
-                symbols_convert, Y_data, test_size=0.2)
-
-        elif self.task == "forecasting":
-            # Fit the scaler to the training data and transform it
-            self.scaler.fit(data)
-            data_scaled = self.scaler.transform(data)
-
-            X_Train_data_patch = np.zeros(
-                [data_scaled.shape[0] - (self.seq_len_pre + self.seq_len_post), self.seq_len_pre,
-                 data_scaled.shape[1]],
-                dtype=float)
-
-            Y_Train_data_patch = np.zeros(
-                [data_scaled.shape[0] - (self.seq_len_pre + self.seq_len_post), self.seq_len_post,
-                 data_scaled.shape[1]],
-                dtype=float)
-
-            for i_data_patch in range(data_scaled.shape[0] - (self.seq_len_pre + self.seq_len_post)):
-                X_Train_data_patch[i_data_patch, :, :] = data_scaled[i_data_patch:i_data_patch + self.seq_len_pre,
-                                                         :]
-                Y_Train_data_patch[i_data_patch, :, :] = data_scaled[
-                                                         i_data_patch + self.seq_len_pre:i_data_patch + self.seq_len_pre + self.seq_len_post,
-                                                         :]
-
-            test_blank_index = []
-            for i_list in range(len(self.alphabet_set)):
-                if ('▁▁' in self.alphabet_set[i_list]):
-                    test_blank_index.append(i_list)
-            del_index1 = np.array(test_blank_index, dtype=int)
-            vocab_list_processed = [vocab_list[num] for num, i in enumerate(vocab_list) if num not in del_index1]
-            self.alphabet_set = vocab_list_processed
-
-            symbols_train_data = self.xabba.fit_transform(X_Train_data_patch, alphabet_set=self.alphabet_set, llm_split='Pre')
-
-            symbols_train_target, params_train_target = self.xabba.transform(Y_Train_data_patch, llm_split='Post')
-
-            if draw_ts is True:
-                reconstruction_train_data = self.xabba.inverse_transform(symbols_train_data)
-                train_data_same_shape = self.xabba.recast_shape(reconstruction_train_data, llm_split='Pre')  # recast into original shape
-
-                reconstruction_train_target = self.xabba.inverse_transform(symbols_train_target, params_train_target)
-                train_target_same_shape = self.xabba.recast_shape(reconstruction_train_target, recap_shape=Y_Train_data_patch.shape, llm_split='Post')  # recast into original shape
-
-                ##################################################################
-                Y_true_pre = self.scaler.inverse_transform(X_Train_data_patch[0, :, :])
-                Y_true_post = self.scaler.inverse_transform(Y_Train_data_patch[0, :, :])
-
-                Y_recons_pre = self.scaler.inverse_transform(train_data_same_shape[0, :, :])
-                Y_recons_post = self.scaler.inverse_transform(train_target_same_shape[0, :, :])
-
-                plt.plot(np.concatenate((Y_true_pre[:, 0], Y_true_post[:, 0]), axis=0), label='Ground Truth')
-                plt.plot(np.concatenate((Y_recons_pre[:, 0], Y_recons_post[:, 0]), axis=0),
-                         label='Reconstruction')
-
-                Cross_Correlation = cross_correlation(
-                    np.concatenate((Y_true_pre[:, 0], Y_true_post[:, 0]), axis=0),
-                    np.concatenate((Y_recons_pre[:, 0], Y_recons_post[:, 0]), axis=0))
-                plt.rcParams.update({'font.size': 20})
-                # plt.title('Cross Correlation: ' + str("{:.3}".format(Cross_Correlation)), fontsize=20)
-                plt.title('A Forecasting Task Before LLM-ABBA', fontsize=20)
-                plt.xlabel('Inout Length', fontsize=20)
-                plt.ylabel('Feature', fontsize=20)
-
-                plt.legend()
-                plt.grid(True, axis='y')
-                plt.tight_layout()
-                # plt.savefig('Compression_Reproduction_img_S' + str(i_reconst) + '_Feature' + str(i_plot) + '.jpg')
-                plt.show()
-                # plt.close()
-                ##################################################################
-
-            train_data_symbolic = []
-            for i_data in range(len(symbols_train_data)):
-                train_data_symbolic.append(listToString(list(symbols_train_data[i_data])))
-
-            train_target_symbolic = []
-            for i_data in range(len(symbols_train_target)):
-                train_target_symbolic.append(listToString(list(symbols_train_target[i_data])))
-
-            arranged_seq = np.random.randint(len(train_data_symbolic), size=int(len(train_data_symbolic) * 0.2))
-
-            val_data_symbolic = [train_data_symbolic[index] for index in arranged_seq]
-            val_target_symbolic = [train_target_symbolic[index] for index in arranged_seq]
-
+        if task == "forecasting":
+            train_values, val_values, train_targets, val_targets = self._forecast_windows(data)
+        elif task in {"classification", "regression"}:
+            train_values, val_values, train_targets, val_targets = train_test_split(
+                data["X_data"], data["Y_data"], test_size=0.2,
+            )
+            train_values = self._supervised_values(train_values)
+            series_length = train_values.shape[1] if train_values.ndim == 3 else None
+            val_values = self._supervised_values(val_values, series_length)
+            train_values = self._scale_batch(train_values, fit=True)
+            val_values = self._scale_batch(val_values)
         else:
-            raise NotImplementedError("Method is not implemented, please contact the maintenance team.")
+            raise ValueError(f"Unknown task: {task!r}")
 
-        data_TS = DatasetDict({
-            'train': Dataset.from_dict({'text_outputs': train_target_symbolic, 'text_inputs': train_data_symbolic}),
-            'val': Dataset.from_dict({'text_outputs': val_target_symbolic, 'text_inputs': val_data_symbolic})
-        })
+        train_symbols = self.xabba.fit_transform(train_values, alphabet_set=alphabet_set)
+        val_symbols, _ = self.xabba.transform(val_values)
 
-        # Check whether the specified path exists or not
-        path = "../save/" + self.project_name + "/"
-        isExist = os.path.exists(path)
-        if not isExist:
-            # Create a new directory because it does not exist
-            os.makedirs(path)
-            print("The new project directory is created!")
+        if task == "forecasting":
+            train_targets, _ = self.xabba.transform(train_targets, llm_split="Post")
+            val_targets, _ = self.xabba.transform(val_targets, llm_split="Post")
+            train_targets = [ListToString(symbols) for symbols in train_targets]
+            val_targets = [ListToString(symbols) for symbols in val_targets]
+            self.xabba.forecast_uses_history_anchor = True
+            self.xabba.forecast_horizon = seq_len_post
 
-        #### Saving Scaler and ABBA
-        output_scaler = open(str("../save/" + self.project_name + "/" + self.task  + "_Scaler" + "_save.pkl"), 'wb')
+        if draw_ts:
+            reconstruction = self.xabba.inverse_transform(train_symbols[:1], self.xabba.start_set[:1])
+            reconstruction = self.xabba.recast_shape(reconstruction, recap_shape=train_values.shape)
+            self._plot_series(train_values[0], reconstruction[0])
 
-        str1 = pickle.dumps(self.scaler)
-        output_scaler.write(str1)
-        output_scaler.close()
+        train_dataset = self._build_dataset(train_symbols, train_targets)
+        val_dataset = self._build_dataset(val_symbols, val_targets)
 
-        # curr_loc = os.path.dirname(os.path.realpath(__file__))
-        save_abba(self.xabba, str("../save/" + self.project_name + "/" + self.task  + "_ABBA" + "_save.pkl"))
+        directory = Path("../save") / project_name
+        directory.mkdir(parents=True, exist_ok=True)
+        save_abba(self.scaler, directory / f"{task}_Scaler_save.pkl")
+        save_abba(self.xabba, directory / f"{task}_ABBA_save.pkl")
+        return train_dataset, val_dataset
 
-        tokenized_train_dataset = data_TS['train'].map(self.build)
-        tokenized_val_dataset = data_TS['val'].map(self.build)
+    @staticmethod
+    def _supervised_values(values, series_length=None):
+        if isinstance(values, pd.DataFrame) and pd.api.types.is_list_like(values.iat[0, 0]):
+            if series_length is None:
+                series_length = min(len(series) for row in values.itertuples(index=False, name=None) for series in row)
+            values, _ = process_data(values, min_len=series_length)
+        return np.asarray(values, dtype=float)
 
-        tokenized_train_dataset.set_format("torch")
-        tokenized_val_dataset.set_format("torch")
+    def _scale_batch(self, values, fit=False):
+        if values.ndim not in (2, 3):
+            raise ValueError("Expected a two- or three-dimensional batch of time series.")
+        scale = self.scaler.fit_transform if fit else self.scaler.transform
+        return scale(values.reshape(-1, values.shape[-1])).reshape(values.shape)
 
-        return tokenized_train_dataset, tokenized_val_dataset
+    def _forecast_windows(self, values):
+        values = np.asarray(values, dtype=float)
+        if values.ndim != 2:
+            raise ValueError("Forecasting data must have shape (time, features).")
+        if self.seq_len_pre < 1 or self.seq_len_post < 1:
+            raise ValueError("Forecasting input and output lengths must be positive.")
+        window_size = self.seq_len_pre + self.seq_len_post
+        if len(values) < 2 * window_size:
+            raise ValueError(f"At least {2 * window_size} time points are required for separate train and validation windows.")
 
+        split = min(max(int(len(values) * 0.8), window_size), len(values) - window_size)
+        self.scaler.fit(values[:split])
 
+        def make_windows(block):
+            scaled = self.scaler.transform(block)
+            windows = np.lib.stride_tricks.sliding_window_view(scaled, window_size, axis=0).swapaxes(1, 2)
+            inputs = windows[:, :self.seq_len_pre]
+            targets = windows[:, self.seq_len_pre:].reshape(len(windows), -1)
+            # The last observed value anchors reconstruction of the first future value.
+            targets = np.column_stack((inputs[:, -1, -1], targets))
+            return inputs, targets
+
+        train_values, train_targets = make_windows(values[:split])
+        val_values, val_targets = make_windows(values[split:])
+        return train_values, val_values, train_targets, val_targets
+
+    def _build_dataset(self, symbols, targets):
+        dataset = Dataset.from_dict({
+            "text_inputs": [ListToString(sequence) for sequence in symbols],
+            "text_outputs": list(targets),
+        }).map(self.build)
+        dataset.set_format("torch")
+        return dataset
+
+    @staticmethod
+    def _plot_series(expected, reconstructed):
+        plt.plot(expected.reshape(len(expected), -1)[:, 0], label="Ground Truth")
+        plt.plot(reconstructed.reshape(len(reconstructed), -1)[:, 0], label="Reconstruction")
+        plt.legend()
+        plt.show()
 
     def model(self, peft_file = None, model_name = None, max_len = 2048) -> None:
 
@@ -391,7 +282,7 @@ class LLMABBA:
 
                 model_tokenizer = AutoTokenizer.from_pretrained(
                     model_name,
-                    model_max_len=max_len,
+                    model_max_length=max_len,
                     padding_side="right",
                     truncation=True,
                     add_eos_token=True,
@@ -416,7 +307,7 @@ class LLMABBA:
 
                 model_tokenizer = AutoTokenizer.from_pretrained(
                     model_name,
-                    model_max_len=max_len,
+                    model_max_length=max_len,
                     padding_side="right",
                     truncation=True,
                     add_eos_token=True,
@@ -438,7 +329,7 @@ class LLMABBA:
 
             #####   Loading LoRA config and PEFT model
             lora_config = LoraConfig(
-                task_type=TaskType.SEQ_CLS,
+                task_type=TaskType.CAUSAL_LM,
                 r=self.lora_r,  # the dimension of the low-rank matrices
                 lora_alpha=self.lora_alpha,  # scaling factor for LoRA activations vs pre-trained weight activations
                 target_modules=self.target_modules,
@@ -452,7 +343,6 @@ class LLMABBA:
             model_input = accelerator.prepare_model(model_input)
 
             model_input.print_trainable_parameters()
-            model_input = model_input.cuda()
 
         else:
             bnb_config = BitsAndBytesConfig(
@@ -460,7 +350,7 @@ class LLMABBA:
                 bnb_4bit_use_double_quant=True,
                 bnb_4bit_quant_type="nf4",
                 bnb_4bit_compute_dtype=torch.bfloat16
-            )
+            ) if self.quant_process else None
 
             model = AutoModelForCausalLM.from_pretrained(
                 model_name,  # Mistral, same as before
@@ -509,13 +399,12 @@ class LLMABBA:
                 gradient_accumulation_steps=4,
                 learning_rate=2e-4,
                 bf16=False,
-                optim="paged_adamw_8bit",
+                optim="paged_adamw_8bit" if self.quant_process else "adamw_torch",
                 num_train_epochs=num_epochs,
                 weight_decay=0.00005,
                 eval_strategy="epoch",  # Updated from previous fix
                 save_strategy="epoch",
                 logging_strategy="epoch",
-                logging_dir="./logs",
                 load_best_model_at_end=True,
                 report_to="wandb",
                 save_total_limit=1,
@@ -530,114 +419,84 @@ class LLMABBA:
 
 
     def inference(self, project_name, data, task, prompt, ft_model, model_tokenizer, scalar="z-score",
-                  seq_len_pre = 24, seq_len_post = 24,
-                  llm_max_length=1024, llm_repetition_penalty=1.7,
-                  llm_temperature=0.0, llm_max_new_tokens=256, draw_ts = False
-                )-> None:
-        """Inference """
+                  seq_len_pre=24, seq_len_post=None, llm_max_length=1024, llm_repetition_penalty=1.7,
+                  llm_temperature=0.0, llm_max_new_tokens=256, draw_ts=False):
+        """Generate a result for each sample or reconstruct a forecast window."""
+        if task not in {"classification", "regression", "forecasting"}:
+            raise ValueError(f"Unknown task: {task!r}")
+        if prompt is None:
+            raise ValueError("A prompt is required for inference.")
 
-        # self.task = task
-        # self.model_tokenizer = model_tokenizer
+        directory = Path("../save") / project_name
+        self.xabba = load_abba(directory / f"{task}_ABBA_save.pkl")
+        self.scaler = load_abba(directory / f"{task}_Scaler_save.pkl")
 
-
-        # Initialize the StandardScaler
-        if scalar == "min-max":
-            self.scaler = preprocessing.MinMaxScaler(feature_range=(0, 1))
-        elif scalar == "z-score":
-            self.scaler =  preprocessing.StandardScaler()
-
-        # Initialize the ABBA block
-        self.xabba = XABBA(tol=self.abba_tol, init=self.abba_init,
-                           alpha=self.abba_alpha, scl=self.abba_scl, verbose=0)
-
-        with open("../save/" + project_name + "/" + task  + "_ABBA" + "_save.pkl", 'rb') as file:
-            self.xabba = pickle.loads(file.read())
-
-        with open(str("../save/" + project_name + "/" + task  + "_Scaler" + "_save.pkl"), 'rb') as file:
-            self.scaler = pickle.loads(file.read())
-
-        if (task == "classification") or (task == "regression"):
-            data_scaled = self.scaler.transform(data)
-            symbols_test_data, params_test_data = self.xabba.transform(data_scaled)
-
-        elif task == "forecasting":
-            data_scaled = self.scaler.transform(data)
-            symbols_test_data, params_test_data = self.xabba.transform(data_scaled, llm_split='Post')
-            reconstruction_test_data = self.xabba_load.inverse_transform(symbols_test_data, params_test_data)
-            test_data_same_shape = self.xabba.recast_shape(reconstruction_test_data,
-                                                           recap_shape=data_scaled.shape,
-                                                           llm_split='Post')  # recast into original shape
-
+        if task == "forecasting":
+            values = np.asarray(data, dtype=float)
+            if values.ndim != 2:
+                raise ValueError("Forecasting data must have shape (time, features).")
+            fitted_shape = self.xabba.recap_shape
+            history_length = fitted_shape[1] if fitted_shape is not None else seq_len_pre
+            if len(values) != history_length:
+                raise ValueError(f"Expected {history_length} time points in the forecast history.")
+            scaled_history = self.scaler.transform(values)
+            data_scaled = scaled_history[np.newaxis, ...]
         else:
-            print("The task is UNKNOWN!")
-            pass
+            fitted_shape = self.xabba.recap_shape
+            values = self._supervised_values(data, fitted_shape[1] if fitted_shape is not None else None)
+            if values.ndim == 1 or (values.ndim == 2 and fitted_shape is not None):
+                values = values[np.newaxis, ...]
+            data_scaled = self._scale_batch(values)
 
-        test_data_symbolic = ListToString(list(symbols_test_data[0]))
-
-        if prompt is not None:
-            test_prompt = f"""{prompt}
-            ### Symbolic Series: {test_data_symbolic}
-            ### Results:
-            """
+        sequences, _ = self.xabba.transform(data_scaled)
+        options = {"repetition_penalty": llm_repetition_penalty, "do_sample": llm_temperature > 0}
+        if llm_temperature > 0:
+            options["temperature"] = llm_temperature
+        if llm_max_new_tokens is None:
+            options["max_length"] = llm_max_length
         else:
-            print("Please provide your Prompt!")
+            options["max_new_tokens"] = llm_max_new_tokens
+        device = getattr(ft_model, "device", None)
 
-        model_input_text = model_tokenizer(test_prompt, return_tensors="pt").to('cuda')
+        outputs = []
+        for symbols in sequences:
+            test_prompt = self._format_prompt(prompt, ListToString(symbols))
+            inputs = model_tokenizer(test_prompt, return_tensors="pt")
+            if device is not None:
+                inputs = inputs.to(device)
+            prompt_length = inputs["input_ids"].shape[-1]
+            generated = ft_model.generate(**inputs, **options)
+            sequences_out = getattr(generated, "sequences", generated)
+            outputs.append(model_tokenizer.decode(sequences_out[0, prompt_length:], skip_special_tokens=True).strip())
 
-        llm_out = model_tokenizer.decode(
-            ft_model.generate(
-                **model_input_text,
-                max_new_tokens=llm_max_new_tokens,
-                max_length=llm_max_length,
-                repetition_penalty=llm_repetition_penalty,
-                temperature=llm_temperature,
-            )[0],
-            skip_special_tokens=True
-        )
+        if task != "forecasting":
+            return outputs[0] if len(outputs) == 1 else outputs
 
-        if (task == "classification") or (task == "regression"):
-            return llm_out
+        if seq_len_post is None:
+            seq_len_post = getattr(self.xabba, "forecast_horizon", 24)
+        if seq_len_post < 1:
+            raise ValueError("The forecast length must be positive.")
 
-        elif task == "forecasting":
-            split_content = llm_out.split('### Results:')
-            listed_split_content = StringToList(split_content[1])
+        tokens = StringToList(outputs[0])
+        alphabet = set(self.xabba.parameters.alphabets)
+        previous = next((token for token in tokens if token in alphabet), None)
+        if previous is None:
+            raise ValueError("The generated forecast contains no recognized ABBA symbols.")
+        forecast_symbols = []
+        for token in tokens:
+            if token in alphabet:
+                previous = token
+            forecast_symbols.append(previous)
 
-            ################################################################## Rescue
-            tokens_output_mistral = listed_split_content[1:-1]
-            model_output_list2_processed = tokens_output_mistral
-            for symbols_i in range(len(tokens_output_mistral)):
-                if tokens_output_mistral[symbols_i] not in self.xabba.parameters.alphabets:
-                    if symbols_i == 0:
-                        model_output_list2_processed[symbols_i] = tokens_output_mistral[-1]
-                    else:
-                        model_output_list2_processed[symbols_i] = tokens_output_mistral[symbols_i - 1]
-
-
-            reconst_test_output = self.xabba.inverse_transform(model_output_list2_processed, params_test_data)  # convert into array
-            reconst_same_shape_output = self.xabba.recast_shape(reconst_test_output, recap_shape=[seq_len_post, data_scaled.size()[2]], llm_split='Post')
-            forecasting_out = self.scaler.inverse_transform(reconst_same_shape_output)
-
-
-            # if draw_ts is True:
-                # ##################################################################
-                # plt.plot(np.concatenate((Y_true_pre[:, i_plot], Y_true_post[:, i_plot]), axis=0), label='Ground Truth')
-                # plt.plot(np.concatenate((Y_recons_pre[:, i_plot], Y_recons_post[:, i_plot]), axis=0),
-                #          label='Reconstruction')
-                #
-                # Cross_Correlation = cross_correlation(
-                #     np.concatenate((Y_true_pre[:, i_plot], Y_true_post[:, i_plot]), axis=0),
-                #     np.concatenate((Y_recons_pre[:, i_plot], Y_recons_post[:, i_plot]), axis=0))
-                # plt.rcParams.update({'font.size': 20})
-                # plt.title('Cross Correlation: ' + str("{:.3}".format(Cross_Correlation)), fontsize=20)
-                # plt.xlabel('Inout Length', fontsize=20)
-                # plt.ylabel('Feature ' + str(i_plot + 1), fontsize=20)
-                #
-                # plt.legend()
-                # plt.grid(True, axis='y')
-                # plt.tight_layout()
-                # # plt.savefig('Compression_Reproduction_img_S' + str(i_reconst) + '_Feature' + str(i_plot) + '.jpg')
-                # plt.show()
-                # # plt.close()
-                # ##################################################################
-
-            return forecasting_out
+        reconstruction = self.xabba.inverse_transform([forecast_symbols], [scaled_history[-1, -1]])[0]
+        if getattr(self.xabba, "forecast_uses_history_anchor", False):
+            reconstruction = reconstruction[1:]
+        n_features = scaled_history.shape[1]
+        reconstructed = self.xabba.recast_shape([reconstruction], recap_shape=(1, seq_len_post, n_features))[0]
+        forecast = self.scaler.inverse_transform(reconstructed)
+        if draw_ts:
+            plt.plot(np.concatenate((values[:, 0], forecast[:, 0])), label="Forecast")
+            plt.axvline(len(values) - 1)
+            plt.legend()
+            plt.show()
+        return forecast

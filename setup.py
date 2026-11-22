@@ -3,7 +3,6 @@ import setuptools
 from distutils.errors import CCompilerError, DistutilsExecError, DistutilsPlatformError
 from setuptools import Extension
 import warnings
-import os
 
 try:
     from Cython.Distutils import build_ext
@@ -50,31 +49,23 @@ class CustomBuildExtCommand(build_ext):
             raise
         build_ext.run(self)
 
-# Check for .pyx files
-pyx_files = ['llmabba/compfp.pyx', 'llmabba/agg.pyx', 'llmabba/inversefp.pyx']
-for pyx_file in pyx_files:
-    if not os.path.exists(pyx_file):
-        log.error(f"Cython file {pyx_file} not found!")
-    else:
-        log.info(f"Found Cython file: {pyx_file}")
-
 setup_args = {
     'name': __package__,
     'packages': setuptools.find_packages(),
     'version': __version__,
     'cmdclass': {'build_ext': CustomBuildExtCommand},
-    'setup_requires': ["cython>=0.27", "numpy>=1.17.3"],
     'install_requires': [
         "tf_keras",
         "wandb",
-        "numpy>=1.3.0",
+        "numpy>=1.20",
         "scipy>=0.7.0",
         "requests",
         "pandas",
         "scikit-learn",
-        "cython>=0.27",
         "joblib>=1.1.1",
+        "torch",
         "transformers",
+        "bitsandbytes",
         "peft",
         "trl",
         "datasets",

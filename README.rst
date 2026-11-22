@@ -106,12 +106,13 @@ The ``LLMABBA`` class integrates ABBA with LLMs (e.g., Mistral-7B) for advanced 
   - ``data``: Dictionary with:
     - ``'X_data'``: 2D NumPy array (n_samples × time_series_length, floats).
     - ``'Y_data'``: 1D NumPy array (n_samples, integers/strings for classification, floats for regression).
-  - For forecasting, ``data`` is a 2D NumPy array, and the method creates input/output patches of lengths ``seq_len_pre`` and ``seq_len_post``.
+  - For forecasting, ``data`` is a 2D NumPy array of shape (time, features). It must contain at least twice the sum of ``seq_len_pre`` and ``seq_len_post`` so training and validation can use non-overlapping time ranges.
 - **Inference**:
-  - ``data``: 2D NumPy array (n_test_samples × time_series_length, floats; can be (1, length) for a single sample).
+  - Classification and regression accept a 2D NumPy array (n_test_samples × time_series_length). Multivariate regression also supports batches of shape (samples, time, features).
+  - Forecasting accepts one 2D history window of shape (time, features).
 
 **Output**:
-- **Classification/Regression**: A string with the predicted class or value (e.g., "0" for abnormal, "Normal", or a numerical value).
+- **Classification/Regression**: A string with the generated prediction for a single sample, or a list of strings in input order for a batch.
 - **Forecasting**: A 2D NumPy array (seq_len_post × n_features, floats) with the predicted time series continuation.
 
 **Key Parameters**:
@@ -124,7 +125,7 @@ The ``LLMABBA`` class integrates ABBA with LLMs (e.g., Mistral-7B) for advanced 
   - ``task``: 'classification', 'regression', or 'forecasting'.
   - ``prompt``: Task-specific instruction for the LLM.
   - ``scalar``: Scaling method ('z-score' or 'min-max').
-  - ``alphabet_set``: Custom symbols or None (uses LLM tokenizer vocab).
+  - ``alphabet_set``: Built-in alphabet selector, a list of whitespace-free custom symbols, or None to use symbols from the LLM tokenizer vocabulary.
   - ``seq_len_pre``/``seq_len_post``: Sequence lengths for forecasting input/output.
 - **Training**:
   - ``num_epochs``: Number of training epochs.

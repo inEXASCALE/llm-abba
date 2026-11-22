@@ -4,19 +4,13 @@ import os
 import itertools
 import warnings
 import numpy as np
-import pandas as pd
-import collections
 from collections import defaultdict
 from dataclasses import dataclass
 from multiprocessing.pool import ThreadPool as Pool
-import multiprocessing as mp
-import pandas, collections
 from sklearn.cluster import KMeans
 from .fkmns import sampledKMeansInter
 from .quant import QUANT
 from joblib import parallel_backend
-import warnings
-warnings.filterwarnings("ignore", category=UserWarning)
 
 
 import multiprocessing
@@ -142,23 +136,18 @@ def get_cpu_affinity():
 
 
 try:
-    # # %load_ext Cython
-    # !python3 setup.py build_ext --inplace
     from .compfp import compress
-    from .aggfp import aggregate 
-    from .inversefp import *
-        
-except ModuleNotFoundError:
-    warnings.warn("cython fail.")
+    from .aggfp import aggregate
+    from .inversefp import inv_transform, inv_digitize, quantize, inv_compress
+except ImportError:
     from .comp import compress
     from .agg import aggregate
-    from .inverse import *
-
+    from .inverse import inv_transform, inv_digitize, quantize, inv_compress
 
 
 def compute_storage(centers, strings, bits_for_len, bits_for_inc, bits_for_ts=32):
     """Compute storage need for representation"""
-    size_centers = centers.shape[0]*bits_for_len + centers.shape[1]*bits_for_inc
+    size_centers = centers.shape[0]*bits_for_len + centers.shape[0]*bits_for_inc
     size_strings = 8 * len(strings)
     return size_centers + size_strings + bits_for_ts
 
@@ -199,7 +188,7 @@ def symbolsAssign(clusters, alphabet_set=0):
                      'w', 'x', 'y', 'z']
 
     elif isinstance(alphabet_set, list) and len(alphabet_set):
-        alphabets = alphabet_set
+        alphabets = list(dict.fromkeys(alphabet_set))
 
     else:
         alphabets = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
@@ -208,31 +197,23 @@ def symbolsAssign(clusters, alphabet_set=0):
                      'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
                      'W', 'X', 'Y', 'Z']
 
-    clusters = pd.Series(clusters)
-    N = len(clusters.unique())
-
-    cluster_sort = [0] * N
-    counter = collections.Counter(clusters)
-    for ind, el in enumerate(counter.most_common()):
-        cluster_sort[ind] = el[0]
-
-    # if N >= len(alphabets):
-    #     alphabets = [chr(i+33) for i in range(0, N)]
-    # else:
-    #     alphabets = alphabets[:N]
-
-    if N > len(alphabets) and len(alphabets) == 32000:
-        print("############################  Change the Alphabet  ############################")
-        print("How many new alphabet needed : " + str(N - 32000))
-        needed_alphabet_len = N - 32000
-        for i in range(0, needed_alphabet_len):
-            alphabets.append(str(i) + 'ABBA')
-    elif N > len(alphabets) and len(alphabets) != 32000:
-        print("The length of used symbols is: " + str(N))
-        alphabets = [chr(i + 33) for i in range(0, N)]
-    else:
-        print("The length of used symbols is: " + str(N))
-        alphabets = alphabets[:N]
+    clusters = np.asarray(clusters, dtype=int)
+    count = len(np.unique(clusters))
+    if count > len(alphabets):
+        if isinstance(alphabet_set, list):
+            used = set(alphabets)
+            for index in itertools.count():
+                if len(alphabets) == count:
+                    break
+                symbol = f"{index}ABBA"
+                if symbol not in used:
+                    alphabets.append(symbol)
+        else:
+            alphabets = [
+                chr(codepoint) if not chr(codepoint).isspace() else f"{codepoint}ABBA"
+                for codepoint in range(33, count + 33)
+            ]
+    alphabets = alphabets[:count]
 
     alphabets = np.asarray(alphabets)
     string = alphabets[clusters]
@@ -457,80 +438,47 @@ class XABBA(object):
         """
         
 
-        len_ts = len(series)
-        n_jobs = self.n_jobs_init(n_jobs, _max=len_ts)     
-        
-        if isinstance(series, np.ndarray):
-            if len(series.shape) == 1:
-                uni_dim = True
-            else:
-                uni_dim = False
-                
-        elif isinstance(series, list):
-            if not isinstance(series[0], list):
-                uni_dim = True
-            else:
-                uni_dim = False
-        else:
-            raise ValueError('Please enter time series with correct shape.')
-                
-        if uni_dim:
-            series = np.asarray(series)
-            if series.dtype !=  'float64':
-                series = np.asarray(series).astype('float64')
-                
-            # Partition time series for parallelism (for n_jobs > 1 or = -1) if it is univarite
-            self.return_series_univariate = True # means the series is univariate,
-                                       # so the reconstruction can automatically 
-                                       # determine if should return the univariate series.
-            if self.partition == None:
-                if self.partition_rate == None:
-                    partition = n_jobs
-                else:
-                    partition = int(np.round(np.exp(1/self.partition_rate), 0))*n_jobs
-                    if partition > len_ts:
-                        warnings.warn("Partition has exceed the maximum length of series.")
-                        partition = len_ts
-            else:
-                if self.partition < len_ts:
-                    partition = self.partition
-                    if n_jobs > partition: # to prevent useless processors
-                        n_jobs = partition
-                else:
-                    warnings.warn("Partition has exceed the maximum length of series.")
-                    partition = n_jobs
-                    
-            # for i in range(partition,0,-1):
-            #    if len_ts % i == 0:
-            interval = int(len_ts / partition)
-            series = np.vstack([series[i*interval : (i+1)*interval] for i in range(partition)])
-                    
-            if self.verbose:
-                if partition != 1:
-                    print("Partition series into {} parts".format(partition))
-                print("Init {} processors.".format(n_jobs))
-        else:
-            self.return_series_univariate = False
-            if isinstance(series, np.ndarray):
-                if len(series.shape) > 2:
-                    self.recap_shape = series.shape
-                    series = series.reshape(-1, int(np.prod(self.recap_shape[1:])))
-            
-        pieces = list()
-        self.start_set = list()
-        
-        p = Pool(n_jobs)
+        rows, n_jobs = self._prepare_series(series, n_jobs, fitting=True)
+        self.start_set = [row[0] for row in rows]
+        inputs = [(row, self.tol, self.max_len) for row in rows]
+        if n_jobs == 1:
+            return [compress(*args) for args in inputs]
+        with Pool(n_jobs) as pool:
+            return pool.starmap(compress, inputs)
 
-        self.start_set = [ts[0] for ts in series]
-        pieces = [p.apply_async(compress, args=(fillna(np.asarray(ts).astype(np.double), self.fillna), self.tol, self.max_len)) for ts in series]
+    def _prepare_series(self, series, n_jobs, fitting=False, llm_split="Pre"):
+        values = np.asarray(series, dtype=np.float64)
+        if values.ndim == 0 or not values.size:
+            raise ValueError("Expected a nonempty time series or batch of time series.")
+        if llm_split not in {"Pre", "Post"}:
+            raise ValueError("llm_split must be 'Pre' or 'Post'.")
 
-        p.close()
-        p.join()
-        pieces = [p.get() for p in pieces]
-        return pieces
-    
-    
-    
+        self.return_series_univariate = values.ndim == 1
+        if fitting:
+            self.recap_shape = values.shape if values.ndim > 2 else None
+
+        if self.return_series_univariate:
+            max_parts = max(1, len(values) // 2)
+            n_jobs = self.n_jobs_init(n_jobs, _max=max_parts)
+            partition = n_jobs
+            if self.partition is not None:
+                partition = self.partition
+            elif self.partition_rate is not None:
+                # Cap the exponent before it can overflow for very small rates.
+                max_multiplier = max_parts / n_jobs
+                exponent = min(1 / self.partition_rate, np.log(max_multiplier))
+                partition = int(round(np.exp(exponent))) * n_jobs
+            rows = np.array_split(values, min(partition, max_parts))
+        else:
+            if (values.ndim > 2 and llm_split == "Pre" and self.recap_shape is not None
+                    and values.shape[1:] != self.recap_shape[1:]):
+                raise ValueError("Expected the same time and feature dimensions as in fit.")
+            rows = values.reshape(len(values), -1)
+            n_jobs = self.n_jobs_init(n_jobs, _max=len(rows))
+
+        rows = [fillna(row.copy(), self.fillna) for row in rows]
+        return rows, min(n_jobs, len(rows))
+
     def digitize(self, series, pieces, alphabet_set=0, n_jobs=-1):
         """ Digitization 
         
@@ -552,16 +500,9 @@ class XABBA(object):
             The list of alphabet letter. Here provide two different kinds of alphabet letters, namely 0 and 1.
         """
         
-        series = np.array(series)
-        len_ts = len(series)
-        
-        if len(series.shape) > 1:
-            sum_of_length = sum([len(series[i]) for i in range(len_ts)])
-            self.eta = 0.000002
-        else:
-            sum_of_length = len_ts
-            self.eta = 0.01
-            
+        self.eta = 0.01 if np.ndim(series) == 1 else 0.000002
+        length_scale = self.scl or 1
+
         num_pieces = list()
 
         for i in range(len(pieces)):
@@ -583,7 +524,7 @@ class XABBA(object):
         if self.init == 'agg':
             labels, splist = aggregate(pieces, self.sorting, self.alpha)
             splist = np.array(splist)
-            centers = splist[:,3:5] * self._std / np.array([self.scl, 1])
+            centers = splist[:,3:5] * self._std / np.array([length_scale, 1])
             self.k = centers.shape[0]
             
         elif self.init == 'f-kmeans':
@@ -601,10 +542,10 @@ class XABBA(object):
                 kmeans.sampled_fit(pieces)
                 
             labels = kmeans.labels_
-            centers = kmeans.cluster_centers_ * self._std / np.array([self.scl, 1])
+            centers = kmeans.cluster_centers_ * self._std / np.array([length_scale, 1])
 
         else: # default => 'kmeans'
-            if self.k >= max_k:
+            if self.k > max_k:
                 self.k = max_k
                 warnings.warn("k is larger than the unique pieces size, so k reduces to unique pieces size.")
             
@@ -612,7 +553,7 @@ class XABBA(object):
                 kmeans = KMeans(n_clusters=self.k, random_state=0, n_init=1).fit(pieces)
                 
             labels = kmeans.labels_
-            centers = kmeans.cluster_centers_ * self._std / np.array([self.scl, 1])
+            centers = kmeans.cluster_centers_ * self._std / np.array([length_scale, 1])
             splist = None
         
         if self.scl == 0:
@@ -650,75 +591,15 @@ class XABBA(object):
 
         """
         
-        if series.dtype !=  'float64':
-            series = series.astype('float64')
-            
-        if isinstance(series, np.ndarray):
-            if len(series.shape) == 1:
-                uni_dim = True
-            else:
-                uni_dim = False
-                
-        elif isinstance(series, list):
-            if not isinstance(series[0], list):
-                uni_dim = True
-            else:
-                uni_dim = False
+        rows, n_jobs = self._prepare_series(series, n_jobs, llm_split=llm_split)
+        start_set = [row[0] for row in rows]
+        if n_jobs == 1:
+            string_sequences = [self.transform_single_series(row) for row in rows]
         else:
-            raise ValueError('Please enter time series with correct shape.')
-            
-        n_jobs = self.n_jobs_init(n_jobs)
-        
-        if uni_dim: 
-            # Partition time series for parallelism (for n_jobs > 1 or = -1) if it is univarite
-            self.return_series_univariate = True # means the series is univariate,
-                                       # so the reconstruction can automatically 
-                                       # determine if should return the univariate series.
-            for i in range(n_jobs,0,-1):
-                if series.shape[0] % i == 0:
-                    interval = int(series.shape[0] / n_jobs)
-                    series = np.vstack([series[i*interval : (i+1)*interval] for i in range(n_jobs)])
-        else:
-            self.return_series_univariate = False
-            
-            if self.recap_shape is not None:
-                if not isinstance(series, np.ndarray):
-                    series = np.asarray(series)
-
-                    if series.shape != self.recap_shape:
-                        raise ValueError('Please enter the input with consistent dimensions.')
-
-                series = series.reshape(-1, int(np.prod(self.recap_shape[1:])))
-
-            if len(series.shape) > 2:
-                if llm_split == 'Pre':
-                    series = series.reshape(-1, int(np.prod(self.recap_shape[1:])))
-                elif llm_split == 'Post':
-                    series = series.reshape(-1, int(np.prod(np.shape(series)[1:])))
-    
-
-        string_sequences = list()
-        start_set = list()
-        if n_jobs != 1:
-            p = Pool(n_jobs)
-            for ts in series:
-                start_set.append(ts[0])
-                string_sequences.append(
-                    p.apply_async(self.transform_single_series, args=(ts,))
-                )
-
-            p.close()
-            p.join()
-            string_sequences = [p.get() for p in string_sequences]
-        else:
-            for ts in series:
-                start_set.append(ts[0])
-                string_sequences.append(self.transform_single_series(ts,))
-        
+            with Pool(n_jobs) as pool:
+                string_sequences = pool.map(self.transform_single_series, rows)
         return string_sequences, start_set
-        
-        
-        
+
     def transform_single_series(self, series):
         """
         Transform a single series to symbols.
@@ -741,35 +622,26 @@ class XABBA(object):
 
         
         
-    def recast_shape(self, reconstruct_list):
-        """Reshape the multiarray to the same shape of the input, the shape might be expanded or squeezed."""
-        size_list = [len(i) for i in reconstruct_list]
-        fixed_len = self.recap_shape[1] * self.recap_shape[2]
-        
-        if fixed_len > np.max(size_list):
-            warnings.warn('The reconstructed shape has been expanded.', ShapeWarning)
-            
-        elif fixed_len < np.max(size_list):
-            warnings.warn('The reconstructed shape has been squeezed.', ShapeWarning)
-        
-        org_size = len(reconstruct_list)
-        
-        if self.recap_shape is not None:
-            reconstruct_list.append(fixed_len * [-1])
-            pad_token = [np.mean(i) for i in reconstruct_list]
-            padded = zip(*zip_longest(*reconstruct_list, fillvalue=pad_token))
+    def recast_shape(self, reconstruct_list, recap_shape=None):
+        """Pad or truncate reconstructed rows to the fitted or supplied batch shape."""
+        shape = self.recap_shape if recap_shape is None else tuple(recap_shape)
+        if shape is None or len(shape) < 2:
+            raise ValueError("A batch shape is required to reshape reconstructed series.")
 
-            padded = list(padded)
-            padded = np.asarray(padded)
-            padded = padded[:org_size, :fixed_len].reshape(-1, *self.recap_shape[1:])
-            
-        else:
-            print(f"""Please ensure your fitted series (not this function input) is numpy.ndarray type with dimensions > 2.""")
-            
-        return padded
-    
-    
-    
+        row_length = int(np.prod(shape[1:]))
+        if any(len(row) < row_length for row in reconstruct_list):
+            warnings.warn("The reconstructed shape has been expanded.", ShapeWarning)
+        if any(len(row) > row_length for row in reconstruct_list):
+            warnings.warn("The reconstructed shape has been squeezed.", ShapeWarning)
+
+        rows = np.empty((len(reconstruct_list), row_length))
+        for index, row in enumerate(reconstruct_list):
+            width = min(len(row), row_length)
+            rows[index, :width] = row[:width]
+            if width < row_length:
+                rows[index, width:] = np.mean(row) if width else 0
+        return rows.reshape(len(rows), *shape[1:])
+
     def inverse_transform(self, string_sequences, start_set=None, n_jobs=1):
         """
         Reconstruct the symbolic sequences to numerical sequences.
@@ -791,14 +663,18 @@ class XABBA(object):
             the machine allows.
         """
         
-        n_jobs = self.n_jobs_init(n_jobs)
         count = len(string_sequences)
+        if count == 0:
+            return np.empty(0) if self.return_series_univariate else []
+        n_jobs = self.n_jobs_init(n_jobs, _max=count)
         
         if start_set is None:
             start_set = self.start_set
             if start_set is None:
                 raise ValueError('Please input valid start_set.')
-        
+        if len(start_set) != count:
+            raise ValueError('Expected one start value per symbolic sequence.')
+
         inverse_sequences = list()
         
         centers = np.zeros(self.parameters.centers.shape)
@@ -852,7 +728,8 @@ class XABBA(object):
         centers[:, 0] = self.quantizer_len.dequant(centers[:, 0])
         centers[:, 1] = self.quantizer_inc.dequant(centers[:, 1])
         
-        splabels = np.argmin(np.linalg.norm(centers  - piece, ord=2, axis=1))
+        offsets = (centers - piece) * np.array([self.scl, 1]) / self._std
+        splabels = np.argmin(np.linalg.norm(offsets, axis=1))
         return self.parameters.alphabets[splabels]
     
     
@@ -876,29 +753,14 @@ class XABBA(object):
         Initialize parameter n_jobs.
         """
         
-        if n_jobs > _max:
-            n_jobs = _max
-            warnings.warn("n_jobs init warning, 'n_jobs' is set to maximum {}.".format(n_jobs))
-        
-        if not isinstance(n_jobs,int):
-            raise TypeError('Expected a int type.')
-        
+        if n_jobs is None or (isinstance(n_jobs, int) and n_jobs < 0):
+            affinity = get_cpu_affinity()
+            n_jobs = len(affinity) if affinity else 1
+        if not isinstance(n_jobs, int):
+            raise TypeError("n_jobs must be an integer.")
         if n_jobs == 0:
-            raise ValueError(
-                "Please feed an correct value for n_jobs.")
-            
-        if n_jobs == None or n_jobs == -1:
-            cpu_affinity = get_cpu_affinity()
-            if cpu_affinity is not None:
-                n_jobs = len(cpu_affinity) 
-            else:
-                n_jobs = 1
-            # int(mp.cpu_count()) , return the available usable CPUs
-        else:
-            n_jobs = n_jobs
-        return n_jobs
-
-
+            raise ValueError("n_jobs must be nonzero.")
+        return min(n_jobs, _max)
 
     @property
     def tol(self):
@@ -968,9 +830,8 @@ class XABBA(object):
             if not isinstance(value, float) and not isinstance(value,int):
                 raise TypeError("Expected a float or int type.")
         
-        if value <= 0:
-            raise ValueError(
-                "Please feed an correct value for max_len.")
+        if not value >= 1:
+            raise ValueError("max_len must be at least 1.")
 
         self._max_len = value
         
@@ -985,7 +846,7 @@ class XABBA(object):
     @partition.setter
     def partition(self, value):
         if value != None:
-            if not isinstance(value, float) and not isinstance(value,int):
+            if not isinstance(value, int):
                 raise TypeError("Expected int type.")
         
             if value <= 0:
@@ -1008,7 +869,7 @@ class XABBA(object):
             if not isinstance(value, float) and not isinstance(value,int):
                 raise TypeError("Expected float or int type.")
         
-            if value > 1 or value < 0:
+            if not 0 < value <= 1:
                 raise ValueError(
                     "Please feed an correct value for partition_rate.")
 
@@ -1098,7 +959,7 @@ class fastXABBA(object): # simulate single time series
         self.n_jobs = n_jobs
 
     def transform(self, series):
-        series = np.array(series)
+        series = np.asarray(series, dtype=np.float64)
         pieces = self._compress(series)
         return self._digitize(pieces)
 
@@ -1106,7 +967,7 @@ class fastXABBA(object): # simulate single time series
     def predict(self, series):
         if self.init == 'kmeans':
             if self.kmeans is not None:
-                series = np.array(series)
+                series = np.asarray(series, dtype=np.float64)
                 pieces = self._compress(series)
                 pieces = pieces[:,:2]
                 pieces = pieces * np.array([self.scl, 1]) / self._std
@@ -1218,7 +1079,7 @@ class fastXABBA_len(object): # simulate single time series
         self.n_jobs = n_jobs
 
     def transform(self, series):
-        series = np.array(series)
+        series = np.asarray(series, dtype=np.float64)
         pieces = self._compress(series)
         return self._digitize(pieces)
 
@@ -1226,7 +1087,7 @@ class fastXABBA_len(object): # simulate single time series
     def predict(self, series):
         if self.init == 'kmeans':
             if self.kmeans is not None:
-                series = np.array(series)
+                series = np.asarray(series, dtype=np.float64)
                 pieces = self._compress(series)
                 pieces = pieces[:,:2]
                 pieces = pieces * np.array([self.scl, 1]) / self._std
@@ -1336,7 +1197,7 @@ class fastXABBA_inc(object): # simulate single time series
         self.n_jobs = n_jobs
 
     def transform(self, series):
-        series = np.array(series)
+        series = np.asarray(series, dtype=np.float64)
         pieces = self._compress(series)
         return self._digitize(pieces)
 
@@ -1344,7 +1205,7 @@ class fastXABBA_inc(object): # simulate single time series
     def predict(self, series):
         if self.init == 'kmeans':
             if self.kmeans is not None:
-                series = np.array(series)
+                series = np.asarray(series, dtype=np.float64)
                 pieces = self._compress(series)
                 pieces = pieces[:,:2]
                 pieces = pieces * np.array([self.scl, 1]) / self._std
@@ -1574,8 +1435,13 @@ def fillna(series, method='ffill'):
             If the last element is nan, then will set it to zero.        
     """
 
-    if method == 'mean':
-        series[np.isnan(series)] = np.mean(series[~np.isnan(series)])
+    missing = np.isnan(series)
+    if not missing.any():
+        return series
+    if missing.all():
+        series.fill(0)
+    elif method == 'mean':
+        series[missing] = np.mean(series[~missing])
 
     elif method == 'median':
         series[np.isnan(series)] = np.median(series[~np.isnan(series)])
@@ -1589,7 +1455,7 @@ def fillna(series, method='ffill'):
 
     elif method == 'bfill':
         for i in sorted(np.where(np.isnan(series))[0], reverse=True):
-            if i < len(series):
+            if i + 1 < len(series):
                 series[i] = series[i+1]
             else:
                 series[i] = 0

@@ -31,6 +31,8 @@ def inv_transform(strings, centers, alphabets, start=0):
         Reconstruction of the time series.
     """
 
+    if len(strings) == 0:
+        return [start]
     pieces = inv_digitize(strings, centers, alphabets)
 
     pieces = quantize(pieces)
@@ -117,6 +119,8 @@ def inv_compress(pieces, start):
         Reconstructed time series
     """
     time_series = [start]
+    if len(pieces) == 1 and pieces[0, 0] == 0:
+        return time_series
     
     # First piece
     x = np.arange(0, pieces[0, 0] + 1) / pieces[0, 0] * (pieces[0, 1] - start)
