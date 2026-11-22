@@ -6,7 +6,7 @@ LLM-ABBA is a Python library and research codebase for using large language mode
 
 ## What LLM-ABBA does
 
-Adaptive Brownian bridge-based symbolic aggregation (ABBA) approximates a signal with variable-length linear segments. A fitted codebook groups segments with similar lengths and changes in value, then assigns each group a symbol. The resulting sequence can be used as model input or decoded into an approximation of the original signal.
+Adaptive Brownian bridge-based symbolic aggregation (ABBA) approximates a signal with variable-length linear segments. In this implementation, a fitted codebook groups segments by length and end value, then assigns each group a symbol. The resulting sequence can be used as model input or decoded into an approximation of the original signal.
 
 - **Symbolic approximation and reconstruction** — Use `ABBA` to encode and decode time series on a CPU without downloading a language model.
 - **Classification and regression** — Use `LLMABBA` to fine-tune a causal language model to predict class labels or numeric targets from symbolic inputs.
@@ -45,15 +45,18 @@ After [installing from source][getting-started], run the PTBDB demo from the rep
 
 ```bash
 cd examples
-WANDB_MODE=disabled python demo-ts-classification.py --model mistralai/Mistral-7B-Instruct-v0.1
+WANDB_MODE=disabled python ../docs/examples/llm_workflow.py classification train
+WANDB_MODE=disabled python ../docs/examples/llm_workflow.py classification evaluate
 ```
 
 ## Documentation
 
-- [Getting started][getting-started] covers installation, CUDA setup, and symbolic approximation.
+- [Getting started][getting-started] covers installation, CUDA setup, and a CPU example.
+- [Symbolic approximation][symbolic] shows how to fit, reuse, and inspect an ABBA codebook.
 - [PTBDB classification tutorial][classification] covers data splits, class balancing, and evaluation on the held-out test set.
-- [Regression and forecasting][workflows] covers input shapes, generation, and checkpoint reuse.
-- [API reference][api] covers the Python classes and methods.
+- [IEEEPPG regression][regression] and [ETTh1 forecasting][forecasting] give complete training and evaluation examples.
+- [Language-model workflow][workflows] covers the shared steps and checkpoint reuse.
+- [API reference][api] documents classes, methods, and functions with examples.
 - [References and citation][citation] provides publication details.
 
 ## Citation
@@ -116,7 +119,10 @@ Report bugs or ask questions in [GitHub Issues][issues]. Documentation and code 
 [paper]: https://arxiv.org/abs/2411.18506
 [license]: https://github.com/inEXASCALE/llm-abba/blob/master/LICENSE
 [getting-started]: https://llm-abba.readthedocs.io/en/latest/getting-started.html
+[symbolic]: https://llm-abba.readthedocs.io/en/latest/symbolic.html
 [classification]: https://llm-abba.readthedocs.io/en/latest/classification.html
+[regression]: https://llm-abba.readthedocs.io/en/latest/regression.html
+[forecasting]: https://llm-abba.readthedocs.io/en/latest/forecasting.html
 [workflows]: https://llm-abba.readthedocs.io/en/latest/workflows.html
 [api]: https://llm-abba.readthedocs.io/en/latest/api.html
 [citation]: https://llm-abba.readthedocs.io/en/latest/references.html

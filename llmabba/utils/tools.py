@@ -40,7 +40,7 @@ def save_train_duration(file_name, test_duration):
     :param test_duration:
     :return:
     """
-    res = pd.DataFrame(data=np.zeros((1, 1), dtype=np.float), index=[0],
+    res = pd.DataFrame(data=np.zeros((1, 1), dtype=float), index=[0],
                        columns=['train_duration'])
     res['train_duration'] = test_duration
     res.to_csv(file_name, index=False)
@@ -53,7 +53,7 @@ def save_test_duration(file_name, test_duration):
     :param test_duration:
     :return:
     """
-    res = pd.DataFrame(data=np.zeros((1, 1), dtype=np.float), index=[0],
+    res = pd.DataFrame(data=np.zeros((1, 1), dtype=float), index=[0],
                        columns=['test_duration'])
     res['test_duration'] = test_duration
     res.to_csv(file_name, index=False)
