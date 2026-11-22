@@ -22,7 +22,7 @@ log = logging.getLogger(__file__)
 ext_errors = (CCompilerError, DistutilsExecError, DistutilsPlatformError, IOError, SystemExit)
 
 def get_version(fname):
-    version = '0.0.2'
+    version = '0.0.6'
     package = 'llmabba'
     try:
         with open(fname) as f:
