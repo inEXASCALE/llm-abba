@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
 
     #### Train the LLM models with LoRA
-    LLMABBA_classification = LLMABBA()
+    LLMABBA_classification = LLMABBA(abba_alpha=0.2)
     model_input, model_tokenizer = LLMABBA_classification.model(
         model_name=model_name,
         max_len=424,
@@ -60,7 +60,8 @@ if __name__ == "__main__":
         num_epochs=1,
         output_dir=output_dir,
         train_dataset=tokenized_train_dataset,
-        val_dataset=tokenized_val_dataset
+        val_dataset=tokenized_val_dataset,
+        balance_classes=True,
     )
 
 

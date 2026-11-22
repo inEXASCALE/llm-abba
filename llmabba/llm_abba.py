@@ -60,6 +60,32 @@ def _four_bit_load_options():
     }
 
 
+def _balanced_classification_dataset(dataset, seed):
+    if "text_outputs" not in dataset.column_names:
+        raise ValueError("Balanced sampling requires a classification dataset returned by process().")
+
+    groups = {}
+    for index, label in enumerate(dataset.with_format("python")["text_outputs"]):
+        groups.setdefault(str(label), []).append(index)
+    if len(groups) <= 1:
+        return dataset
+
+    rng = np.random.default_rng(seed)
+    per_class, remainder = divmod(len(dataset), len(groups))
+    group_indices = list(groups.values())
+    selected = []
+    for offset, group in enumerate(rng.permutation(len(group_indices))):
+        indices = group_indices[group]
+        count = per_class + (offset < remainder)
+        if count <= len(indices):
+            selected.extend(rng.choice(indices, size=count, replace=False))
+        else:
+            selected.extend(indices)
+            extra = count - len(indices)
+            selected.extend(rng.choice(indices, size=extra, replace=extra > len(indices)))
+    return dataset.select(rng.permutation(selected).tolist())
+
+
 def cross_correlation(x, y):
     # Calculate means
     x_mean = mean(x)
@@ -281,7 +307,11 @@ class LLMABBA:
         else:
             raise ValueError(f"Unknown task: {task!r}")
 
-        train_symbols = self.xabba.fit_transform(train_values, alphabet_set=alphabet_set)
+        if task == "classification":
+            self.xabba.fit(train_values, alphabet_set=alphabet_set)
+            train_symbols, _ = self.xabba.transform(train_values)
+        else:
+            train_symbols = self.xabba.fit_transform(train_values, alphabet_set=alphabet_set)
         val_symbols, _ = self.xabba.transform(val_values)
 
         if task == "classification":
@@ -432,8 +462,14 @@ class LLMABBA:
 
 
 
-    def train(self, model_input, num_epochs, output_dir, train_dataset, val_dataset):
-        """Train with validation"""
+    def train(self, model_input, num_epochs, output_dir, train_dataset, val_dataset, *,
+              balance_classes=False, sampling_seed=42):
+        """Train with validation and optional class-balanced sampling of the training set."""
+        if balance_classes:
+            if self.task != "classification":
+                raise ValueError("Balanced sampling is available for classification only.")
+            train_dataset = _balanced_classification_dataset(train_dataset, sampling_seed)
+
         if torch.cuda.device_count() > 1:  # If more than 1 GPU
             model_input.is_parallelizable = True
             model_input.model_parallel = True

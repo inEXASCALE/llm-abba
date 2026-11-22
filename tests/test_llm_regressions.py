@@ -10,12 +10,13 @@ import pandas as pd
 
 try:
     import torch
+    from datasets import Dataset
     from transformers import BatchEncoding
 except ModuleNotFoundError as error:
     raise unittest.SkipTest(f"LLM dependencies unavailable: {error.name}") from error
 
 from llmabba import LLMABBA
-from llmabba.llm_abba import ListToString, StringToList, _four_bit_load_options
+from llmabba.llm_abba import ListToString, StringToList, _balanced_classification_dataset, _four_bit_load_options
 from llmabba.llmabba import LLMABBA as LegacyLLMABBA
 from llmabba.utils.regressor_tools import calculate_regression_metrics
 from llmabba.xabba import ShapeWarning
@@ -182,6 +183,10 @@ class LLMABBARegressionTests(unittest.TestCase):
         val_indices = list(val.with_format("python")["text_outputs"])
         self.assertTrue(set(train_indices).isdisjoint(val_indices))
         np.testing.assert_allclose(self.model.scaler.mean_, features[train_indices].mean(axis=0))
+        scaled_train = self.model.scaler.transform(features[train_indices])
+        symbols, _ = self.model.xabba.transform(scaled_train, n_jobs=1)
+        self.assertEqual(list(train.with_format("python")["text_inputs"]),
+                         [ListToString(row) for row in symbols])
         self.tokenizer.prompts.clear()
         result = LLMABBA().inference(
             "example", features[:2], "classification", "Classify",
@@ -194,6 +199,15 @@ class LLMABBARegressionTests(unittest.TestCase):
             ToyClassifier([1]), self.tokenizer,
         )
         self.assertEqual(single, "1")
+
+    def test_balanced_sampling_preserves_epoch_size_and_minority_examples(self):
+        dataset = Dataset.from_dict({"row": list(range(10)), "text_outputs": [0] * 8 + [1] * 2})
+        balanced = _balanced_classification_dataset(dataset, seed=42)
+        self.assertEqual(len(balanced), 10)
+        self.assertEqual(list(balanced["text_outputs"]).count(0), 5)
+        self.assertTrue({8, 9}.issubset(balanced["row"]))
+        self.assertEqual(list(dataset["row"]), list(range(10)))
+        self.assertEqual(list(balanced["row"]), list(_balanced_classification_dataset(dataset, seed=42)["row"]))
 
     def test_regression_uses_training_feature_statistics(self):
         features = pd.DataFrame({"dim": [

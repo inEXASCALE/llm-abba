@@ -1,16 +1,15 @@
 import sys
-import os
-import sphinx_rtd_theme
+from pathlib import Path
 
 
-sys.path.insert(0, os.path.abspath('../..'))
-# sys.path.insert(0, os.path.abspath('../../llmabba'))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+
+from llmabba import __version__ as release
 
 
 project = 'llmabba'
 copyright = 'Erin Carson, Xinye Chen, and Cheng Kang'
 author = 'InEXASCALE computing'
-release = '0.0.1'
 
 extensions = [
     'sphinx.ext.autodoc',

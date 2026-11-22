@@ -11,11 +11,11 @@ except ImportError as e:
     from setuptools.command.build_ext import build_ext
 
 try:
-    with open("README.rst", 'r', encoding='utf-8') as f:
+    with open("README.md", 'r', encoding='utf-8') as f:
         long_description = f.read()
 except Exception as e:
     long_description = ""
-    warnings.warn(f"Failed to read README.rst: {e}")
+    warnings.warn(f"Failed to read README.md: {e}")
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__file__)
@@ -88,9 +88,9 @@ setup_args = {
         "Programming Language :: Python :: 3"
     ],
     'description': "LLM-ABBA: mining time series via symbolic approximation and large language models",
-    'long_description_content_type': 'text/x-rst',
-    'url': "https://github.com/inEXASCALE/llmabba",
-    'license': 'BSD 3-Clause'
+    'long_description_content_type': 'text/markdown',
+    'url': "https://github.com/inEXASCALE/llm-abba",
+    'license': 'MIT'
 }
 
 # Define Cython extensions
