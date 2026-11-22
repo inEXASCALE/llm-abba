@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -14,7 +15,7 @@ except ModuleNotFoundError as error:
     raise unittest.SkipTest(f"LLM dependencies unavailable: {error.name}") from error
 
 from llmabba import LLMABBA
-from llmabba.llm_abba import ListToString, StringToList
+from llmabba.llm_abba import ListToString, StringToList, _four_bit_load_options
 from llmabba.llmabba import LLMABBA as LegacyLLMABBA
 from llmabba.utils.regressor_tools import calculate_regression_metrics
 from llmabba.xabba import ShapeWarning
@@ -22,6 +23,8 @@ from llmabba.xabba import ShapeWarning
 
 class ToyTokenizer:
     all_special_tokens = ("<pad>",)
+    eos_token_id = 3
+    pad_token_id = 3
 
     def __init__(self):
         self.prompts = []
@@ -34,6 +37,11 @@ class ToyTokenizer:
         if return_tensors == "pt":
             self.prompts.append(prompt)
             return BatchEncoding({"input_ids": torch.tensor([[8, 9]]), "attention_mask": torch.tensor([[1, 1]])})
+        if kwargs.get("add_special_tokens") is False:
+            if prompt.strip().isdigit():
+                return {"input_ids": [20 + int(prompt)]}
+            self.prompts.append(prompt)
+            return {"input_ids": [8, 9]}
         return {
             "input_ids": [8, 9, 3] + [3] * (max_length - 3),
             "attention_mask": [1, 1, 1] + [0] * (max_length - 3),
@@ -57,6 +65,32 @@ class ToyGenerator:
         return torch.cat((input_ids, torch.tensor([[10]])), dim=1)
 
 
+class ToyChatTokenizer(ToyTokenizer):
+    chat_template = "toy"
+
+    def apply_chat_template(self, messages, *, tokenize, add_generation_prompt, return_dict, tokenizer_kwargs):
+        assert tokenize and add_generation_prompt and not return_dict
+        assert [message["role"] for message in messages] == ["user"]
+        series = messages[0]["content"].rsplit("### Symbolic Series:", 1)[1]
+        return [1, 8, *([12] * len(series.split())), 9]
+
+
+class ToyClassifier:
+    device = torch.device("cpu")
+
+    def __init__(self, labels):
+        self.labels = iter(labels)
+
+    def generate(self, input_ids, prefix_allowed_tokens_fn, **kwargs):
+        tokens = []
+        for index, prefix in enumerate(input_ids):
+            output = 20 + next(self.labels)
+            allowed = prefix_allowed_tokens_fn(index, prefix)
+            assert 3 not in allowed and output in allowed
+            tokens.append([output])
+        return torch.cat((input_ids, torch.tensor(tokens)), dim=1)
+
+
 class LLMABBARegressionTests(unittest.TestCase):
     def setUp(self):
         temp = TemporaryDirectory()
@@ -75,6 +109,69 @@ class LLMABBARegressionTests(unittest.TestCase):
         result = self.model.tokenize("classify")
         self.assertEqual(result["labels"], [8, 9, 3] + [-100] * 9)
 
+    def test_classification_preserves_chat_prefix_and_supervises_only_answer(self):
+        tokenizer = ToyChatTokenizer()
+        self.model.model_tokenizer = tokenizer
+        self.model.prompt = "Classify"
+        self.model.xabba = SimpleNamespace(
+            classification_label_tokens={"0": (20,), "1": (21,)}, classification_max_len=8,
+        )
+        symbols = "A B C D E F G H"
+        prefix = self.model._classification_prompt_ids("Classify", symbols, tokenizer)
+        self.assertEqual(prefix, [1, 8, 12, 12, 12, 9])
+        result = self.model.build({"text_inputs": symbols, "text_outputs": 1})
+        self.assertEqual(result["input_ids"], prefix + [21, 3])
+        self.assertEqual(result["labels"], [-100] * len(prefix) + [21, 3])
+
+        padded = self.model.build({"text_inputs": "A", "text_outputs": 0})
+        self.assertEqual(padded["labels"], [-100] * 4 + [20, 3, -100, -100])
+        self.assertEqual(padded["attention_mask"], [1] * 6 + [0, 0])
+
+    def test_classification_batch_allows_padding_after_a_shorter_label(self):
+        self.model.xabba = SimpleNamespace(classification_label_tokens={
+            "short": (20,), "long": (20, 21, 22),
+        })
+
+        def generate(input_ids, prefix_allowed_tokens_fn, **kwargs):
+            self.assertEqual(input_ids.tolist(), [[8, 9, 20], [8, 9, 20]])
+            self.assertEqual(prefix_allowed_tokens_fn(0, input_ids[0]), [3, 21])
+            first_step = torch.cat((input_ids, torch.tensor([[3], [21]])), dim=1)
+            self.assertEqual(prefix_allowed_tokens_fn(0, first_step[0]), [3])
+            self.assertEqual(prefix_allowed_tokens_fn(1, first_step[1]), [22])
+            return torch.cat((first_step, torch.tensor([[3], [22]])), dim=1)
+
+        model = SimpleNamespace(device=torch.device("cpu"), generate=generate)
+        self.assertEqual(
+            self.model._predict_classification_batch([[8, 9], [8, 9]], model, self.tokenizer),
+            ["short", "long"],
+        )
+
+    def test_four_bit_load_options_match_compute_and_model_dtypes(self):
+        cases = [
+            (True, True, "5.24.0", "dtype", torch.bfloat16),
+            (True, False, "4.56.0", "dtype", torch.float16),
+            (False, False, "4.55.4", "torch_dtype", torch.float32),
+        ]
+        for cuda, native_bf16, version, dtype_argument, dtype in cases:
+            with (
+                self.subTest(cuda=cuda, native_bf16=native_bf16, version=version),
+                patch("llmabba.llm_abba.torch.cuda.is_available", return_value=cuda),
+                patch("llmabba.llm_abba.torch.cuda.is_bf16_supported", return_value=native_bf16) as supports_bf16,
+                patch("llmabba.llm_abba.transformers_version", version),
+                patch("llmabba.llm_abba.BitsAndBytesConfig") as config,
+            ):
+                self.assertEqual(_four_bit_load_options(), {
+                    dtype_argument: dtype, "quantization_config": config.return_value,
+                })
+                config.assert_called_once_with(
+                    load_in_4bit=True, bnb_4bit_use_double_quant=True,
+                    bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=dtype,
+                )
+                if cuda:
+                    supports_bf16.assert_called_once_with(including_emulation=False)
+                else:
+                    supports_bf16.assert_not_called()
+
     def test_classification_holdout_and_ordered_batch_inference(self):
         features = np.arange(40.).reshape(10, 4)
         labels = np.arange(len(features))
@@ -85,17 +182,18 @@ class LLMABBARegressionTests(unittest.TestCase):
         val_indices = list(val.with_format("python")["text_outputs"])
         self.assertTrue(set(train_indices).isdisjoint(val_indices))
         np.testing.assert_allclose(self.model.scaler.mean_, features[train_indices].mean(axis=0))
+        self.tokenizer.prompts.clear()
         result = LLMABBA().inference(
             "example", features[:2], "classification", "Classify",
-            ToyGenerator(self.tokenizer, ["first", "second"]), self.tokenizer,
+            ToyClassifier([1, 2]), self.tokenizer,
         )
-        self.assertEqual(result, ["first", "second"])
+        self.assertEqual(result, ["1", "2"])
         self.assertEqual(len(self.tokenizer.prompts), 2)
         single = LLMABBA().inference(
             "example", features[0], "classification", "Classify",
-            ToyGenerator(self.tokenizer, ["first"]), self.tokenizer,
+            ToyClassifier([1]), self.tokenizer,
         )
-        self.assertEqual(single, "first")
+        self.assertEqual(single, "1")
 
     def test_regression_uses_training_feature_statistics(self):
         features = pd.DataFrame({"dim": [

@@ -131,13 +131,13 @@ The ``LLMABBA`` class integrates ABBA with LLMs (e.g., Mistral-7B) for advanced 
   - ``num_epochs``: Number of training epochs.
   - ``output_dir``: Directory for saving checkpoints.
 - **Inference**:
-  - ``llm_max_new_tokens``: Maximum tokens for LLM output.
+  - ``llm_max_new_tokens``: Maximum tokens for free-form regression and forecasting output. Classifiers trained by ``process()`` decode from their saved class vocabulary.
   - ``llm_temperature``: Controls randomness (0.0 for deterministic).
   - ``llm_repetition_penalty``: Penalizes repeated tokens.
 
 **Example: ECG Classification with PTBDB**
 
-This example demonstrates binary classification (abnormal vs. normal ECG signals) using the PTB Diagnostic ECG Database (~187 time points per sample). To successfully run the example, one will need a Hugging Face account and obtain access to `Mistral-7B-Instruct-v0.1s <https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1>`_:
+This example uses `Mistral-7B-Instruct-v0.1 <https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1>`_ to classify ECG signals. Classification uses the tokenizer's chat template when available, trains on the answer tokens, and decodes only the saved class labels. Run the example from the ``examples`` directory.
 
 .. code-block:: python
 
@@ -145,27 +145,37 @@ This example demonstrates binary classification (abnormal vs. normal ECG signals
    import numpy as np
    from llmabba.llmabba import LLMABBA
    from sklearn.model_selection import train_test_split
+   from transformers.trainer_utils import get_last_checkpoint
 
    project_name = "PTBDB"
    task_type = "classification"
    model_name = 'mistralai/Mistral-7B-Instruct-v0.1'
-   prompt_input = """This is a classification task. Identify the 'ECG Abnormality' according to the given 'Symbolic Series'."""
+   output_dir = '../save/PTBDB/checkpoints'
+   prompt_input = (
+       "Classify the ECG represented by the symbolic series. Use 0 for abnormal and 1 for normal. "
+       "Reply with exactly one digit, 0 or 1."
+   )
 
    # Load and process data
    abnormal_df = pd.read_csv('../test_data/ptbdb_abnormal.csv', header=None)
    normal_df = pd.read_csv('../test_data/ptbdb_normal.csv', header=None)
 
    Y_data = np.concatenate((np.zeros([abnormal_df.shape[0]], dtype=int), np.ones([normal_df.shape[0]], dtype=int)))
-   X_data = pd.concat([abnormal_df, normal_df]).to_numpy()
+   # The last column of each CSV contains its label.
+   X_data = pd.concat([abnormal_df, normal_df], ignore_index=True).iloc[:, :-1].to_numpy()
 
-   arranged_seq = np.random.permutation(len(Y_data))
-   train_data, test_data, train_target, test_target = train_test_split(X_data[arranged_seq], Y_data[arranged_seq], test_size=0.2)
+   train_data, test_data, train_target, test_target = train_test_split(
+       X_data, Y_data, test_size=0.2, stratify=Y_data, random_state=42,
+   )
 
-   train_data_split = {'X_data': train_data[:500], 'Y_data': train_target[:500]}
+   train_data, _, train_target, _ = train_test_split(
+       train_data, train_target, train_size=500, stratify=train_target, random_state=42,
+   )
+   train_data_split = {'X_data': train_data, 'Y_data': train_target}
 
    # Train with LLM-ABBA
    LLMABBA_classification = LLMABBA()
-   model_input, model_tokenizer = LLMABBA_classification.model(model_name=model_name, max_len=2048)
+   model_input, model_tokenizer = LLMABBA_classification.model(model_name=model_name, max_len=424)
 
    tokenized_train_dataset, tokenized_val_dataset = LLMABBA_classification.process(
        project_name=project_name,
@@ -180,7 +190,7 @@ This example demonstrates binary classification (abnormal vs. normal ECG signals
    LLMABBA_classification.train(
        model_input=model_input,
        num_epochs=1,
-       output_dir='../save/',
+       output_dir=output_dir,
        train_dataset=tokenized_train_dataset,
        val_dataset=tokenized_val_dataset
    )
@@ -188,9 +198,9 @@ This example demonstrates binary classification (abnormal vs. normal ECG signals
    # Inference
    test_data = np.expand_dims(test_data[1], axis=0)
    peft_model_input, model_tokenizer = LLMABBA_classification.model(
-       peft_file='../llm-abba-master/save/checkpoint-25/',
+       peft_file=get_last_checkpoint(output_dir),
        model_name=model_name,
-       max_len=2048
+       max_len=424
    )
 
    out_text = LLMABBA_classification.inference(
@@ -200,11 +210,6 @@ This example demonstrates binary classification (abnormal vs. normal ECG signals
        prompt=prompt_input,
        ft_model=peft_model_input,
        model_tokenizer=model_tokenizer,
-       scalar="z-score",
-       llm_max_length=256,
-       llm_repetition_penalty=1.9,
-       llm_temperature=0.0,
-       llm_max_new_tokens=2
    )
 
    print(out_text)

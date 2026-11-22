@@ -1,5 +1,6 @@
 from datetime import datetime
 import math
+from os.path import commonprefix
 from pathlib import Path
 import pickle
 
@@ -7,6 +8,7 @@ from accelerate import Accelerator, FullyShardedDataParallelPlugin
 from datasets import Dataset
 import matplotlib.pyplot as plt
 import numpy as np
+from packaging.version import Version
 import pandas as pd
 from peft import LoraConfig, PeftModel, TaskType, get_peft_model, prepare_model_for_kbit_training
 from sklearn import preprocessing
@@ -15,6 +17,7 @@ import torch
 from torch.distributed.fsdp.fully_sharded_data_parallel import FullOptimStateDictConfig, FullStateDictConfig
 from transformers import (
     AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, DataCollatorWithPadding, Trainer, TrainingArguments,
+    __version__ as transformers_version,
 )
 
 from .utils.fundamentals import mean
@@ -37,6 +40,24 @@ def ListToString(symbols):
 
 def StringToList(text):
     return text.split()
+
+
+def _four_bit_load_options():
+    if torch.cuda.is_available():
+        dtype = torch.bfloat16 if torch.cuda.is_bf16_supported(including_emulation=False) else torch.float16
+    else:
+        dtype = torch.float32
+
+    dtype_argument = "dtype" if Version(transformers_version).release >= (4, 56) else "torch_dtype"
+    return {
+        dtype_argument: dtype,
+        "quantization_config": BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_compute_dtype=dtype,
+        ),
+    }
 
 
 def cross_correlation(x, y):
@@ -116,8 +137,94 @@ class LLMABBA:
         return result
 
     def build(self, data_point):
+        class_tokens = getattr(getattr(self, "xabba", None), "classification_label_tokens", None)
+        if class_tokens is not None:
+            tokenizer = self.model_tokenizer
+            prefix = self._classification_prompt_ids(self.prompt, data_point["text_inputs"], tokenizer)
+            answer = [*class_tokens[str(data_point["text_outputs"])], tokenizer.eos_token_id]
+            padding = self.xabba.classification_max_len - len(prefix) - len(answer)
+            return {
+                "input_ids": prefix + answer + [tokenizer.pad_token_id] * padding,
+                "attention_mask": [1] * (len(prefix) + len(answer)) + [0] * padding,
+                "labels": [-100] * len(prefix) + answer + [-100] * padding,
+            }
         prompt = self._format_prompt(self.prompt, data_point["text_inputs"])
         return self.tokenize(f'{prompt} {data_point["text_outputs"]}')
+
+    def _classification_prompt_ids(self, prompt, symbols, tokenizer):
+        longest_label = max(map(len, self.xabba.classification_label_tokens.values()))
+        budget = self.xabba.classification_max_len - longest_label - 1
+
+        def encode(series):
+            if getattr(tokenizer, "chat_template", None):
+                message = {"role": "user", "content": f"{prompt}\n### Symbolic Series: {series}"}
+                return tokenizer.apply_chat_template(
+                    [message], tokenize=True, add_generation_prompt=True, return_dict=False,
+                    tokenizer_kwargs={"verbose": False},
+                )
+            text = self._format_prompt(prompt, series)
+            return tokenizer(text, add_special_tokens=False, verbose=False)["input_ids"]
+
+        ids = encode(symbols)
+        if ids and len(ids) <= budget:
+            return ids
+
+        # Truncate only the series so the instruction and assistant boundary stay intact.
+        best = encode("")
+        if not best or len(best) > budget:
+            raise ValueError("max_len is too short for the classification prompt and its answer.")
+        pieces = symbols.split()
+        low, high = 1, len(pieces)
+        while low <= high:
+            middle = (low + high) // 2
+            candidate = encode(" ".join(pieces[:middle]))
+            if len(candidate) <= budget:
+                best = candidate
+                low = middle + 1
+            else:
+                high = middle - 1
+        return best
+
+    def _predict_classification_batch(self, prefixes, ft_model, tokenizer):
+        """Decode known labels for a batch of equally sized prompt prefixes."""
+        candidates = self.xabba.classification_label_tokens
+        if len(candidates) == 1:
+            return [next(iter(candidates))] * len(prefixes)
+
+        shared = commonprefix(list(candidates.values()))
+        labels = {tuple(tokens[len(shared):]): label for label, tokens in candidates.items()}
+        eos = tokenizer.eos_token_id
+        allowed = {}
+        for tokens in labels:
+            for index, token in enumerate(tokens):
+                allowed.setdefault(tokens[:index], set()).add(token)
+            allowed.setdefault(tokens, set()).add(eos)
+        allowed = {prefix: sorted(tokens) for prefix, tokens in allowed.items()}
+
+        inputs = torch.tensor([prefix + list(shared) for prefix in prefixes], dtype=torch.long,
+                              device=getattr(ft_model, "device", None))
+        prompt_length = inputs.shape[-1]
+
+        def allowed_tokens(batch_index, sequence):
+            continuation = tuple(sequence[prompt_length:].tolist())
+            return [eos] if eos in continuation else allowed[continuation]
+
+        generated = ft_model.generate(
+            input_ids=inputs, attention_mask=torch.ones_like(inputs),
+            do_sample=False, num_beams=1, max_new_tokens=max(map(len, labels)),
+            eos_token_id=eos, pad_token_id=tokenizer.pad_token_id,
+            prefix_allowed_tokens_fn=allowed_tokens,
+        )
+        sequences = getattr(generated, "sequences", generated)
+        results = []
+        for continuation in sequences[:, prompt_length:].tolist():
+            if eos in continuation:
+                continuation = continuation[:continuation.index(eos)]
+            label = labels.get(tuple(continuation))
+            if label is None:
+                raise RuntimeError("The model generated tokens outside the trained classification labels.")
+            results.append(label)
+        return results
 
     @staticmethod
     def _format_prompt(prompt, symbols):
@@ -176,6 +283,19 @@ class LLMABBA:
 
         train_symbols = self.xabba.fit_transform(train_values, alphabet_set=alphabet_set)
         val_symbols, _ = self.xabba.transform(val_values)
+
+        if task == "classification":
+            if model_tokenizer.eos_token_id is None or model_tokenizer.pad_token_id is None:
+                raise ValueError("Classification requires a tokenizer with EOS and padding tokens.")
+            label_tokens = {
+                label: tuple(model_tokenizer(f" {label}", add_special_tokens=False)["input_ids"])
+                for label in dict.fromkeys(map(str, data["Y_data"]))
+            }
+            if (any(not tokens or model_tokenizer.eos_token_id in tokens for tokens in label_tokens.values())
+                    or len(set(label_tokens.values())) != len(label_tokens)):
+                raise ValueError("Classification labels must encode to distinct, nonempty token sequences without EOS.")
+            self.xabba.classification_label_tokens = label_tokens
+            self.xabba.classification_max_len = self.max_len
 
         if task == "forecasting":
             train_targets, _ = self.xabba.transform(train_targets, llm_split="Post")
@@ -266,66 +386,26 @@ class LLMABBA:
             )
             accelerator = Accelerator(fsdp_plugin=fsdp_plugin)
 
-            """Model selection with parameters"""
-            if self.quant_process is True:
-                ##  Quantization Coonfig
-                quantization_config = BitsAndBytesConfig(
-                    # Load the model with 4-bit quantization
-                    load_in_4bit=True,
-                    # Use double quantization
-                    bnb_4bit_use_double_quant=True,
-                    # Use 4-bit Normal Float for storing the base model weights in GPU memory
-                    bnb_4bit_quant_type="nf4",
-                    # De-quantize the weights to 16-bit (Brain) float before the forward/backward pass
-                    bnb_4bit_compute_dtype=torch.bfloat16,
-                )
+        model_tokenizer = AutoTokenizer.from_pretrained(
+            model_name,
+            model_max_length=max_len,
+            padding_side="right",
+            truncation=True,
+            add_eos_token=True,
+        )
+        model_tokenizer.padding_side = "right"
+        model_tokenizer.pad_token = model_tokenizer.eos_token
+        model_tokenizer.pad_token_id = model_tokenizer.eos_token_id
 
-                model_tokenizer = AutoTokenizer.from_pretrained(
-                    model_name,
-                    model_max_length=max_len,
-                    padding_side="right",
-                    truncation=True,
-                    add_eos_token=True,
-                )
+        load_options = _four_bit_load_options() if self.quant_process else {}
+        model_input = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True, **load_options)
 
-                model_tokenizer.padding_side = 'right'
-                model_tokenizer.pad_token = model_tokenizer.eos_token
-                model_tokenizer.pad_token_id = model_tokenizer.eos_token_id
-
-                model_input = AutoModelForCausalLM.from_pretrained(
-                    pretrained_model_name_or_path=model_name,
-                    quantization_config=quantization_config,
-                    # device_map="auto",
-                    trust_remote_code=True,
-                    torch_dtype=torch.bfloat16,
-                )
-
-                model_input.config.pad_token_id = model_input.config.eos_token_id
-                model_input = prepare_model_for_kbit_training(model_input)
-
-            else:
-
-                model_tokenizer = AutoTokenizer.from_pretrained(
-                    model_name,
-                    model_max_length=max_len,
-                    padding_side="right",
-                    truncation=True,
-                    add_eos_token=True,
-                )
-
-                model_tokenizer.padding_side = 'right'
-                model_tokenizer.pad_token = model_tokenizer.eos_token
-                model_tokenizer.pad_token_id = model_tokenizer.eos_token_id
-                model_input = AutoModelForCausalLM.from_pretrained(
-                    pretrained_model_name_or_path=model_name,
-                    # device_map="auto",
-                    trust_remote_code=True,
-                )
-                # Data collator for padding a batch of examples to the maximum length seen in the batch
+        if peft_file is None:
+            if not self.quant_process:
                 self.model_data_collator = DataCollatorWithPadding(tokenizer=model_tokenizer)
 
-                model_input.config.pad_token_id = model_input.config.eos_token_id
-                model_input = prepare_model_for_kbit_training(model_input)
+            model_input.config.pad_token_id = model_input.config.eos_token_id
+            model_input = prepare_model_for_kbit_training(model_input)
 
             #####   Loading LoRA config and PEFT model
             lora_config = LoraConfig(
@@ -345,34 +425,7 @@ class LLMABBA:
             model_input.print_trainable_parameters()
 
         else:
-            bnb_config = BitsAndBytesConfig(
-                load_in_4bit=True,
-                bnb_4bit_use_double_quant=True,
-                bnb_4bit_quant_type="nf4",
-                bnb_4bit_compute_dtype=torch.bfloat16
-            ) if self.quant_process else None
-
-            model = AutoModelForCausalLM.from_pretrained(
-                model_name,  # Mistral, same as before
-                quantization_config=bnb_config,  # Same quantization config as before
-                # device_map="auto",
-                trust_remote_code=True,
-            )
-
-            model_tokenizer = AutoTokenizer.from_pretrained(
-                model_name,
-                model_max_length=self.max_len,
-                padding_side="right",
-                truncation=True,
-                add_eos_token=True,
-            )
-
-            model_tokenizer.padding_side = 'right'
-            model_tokenizer.pad_token = model_tokenizer.eos_token
-            model_tokenizer.pad_token_id = model_tokenizer.eos_token_id
-            print(len(model_tokenizer))
-
-            model_input = PeftModel.from_pretrained(model, peft_file)
+            model_input = PeftModel.from_pretrained(model_input, peft_file)
 
         self.model_tokenizer = model_tokenizer
         return model_input, model_tokenizer
@@ -386,6 +439,10 @@ class LLMABBA:
             model_input.model_parallel = True
 
         run_name = self.task + "-" + self.model_name
+        checkpointing_argument = (
+            "activation_checkpointing" if hasattr(TrainingArguments, "activation_checkpointing")
+            else "gradient_checkpointing"
+        )
 
         trainer = Trainer(
             model=model_input,
@@ -395,7 +452,6 @@ class LLMABBA:
                 output_dir=output_dir,
                 warmup_steps=5,
                 per_device_train_batch_size=4,
-                gradient_checkpointing=True,
                 gradient_accumulation_steps=4,
                 learning_rate=2e-4,
                 bf16=False,
@@ -409,7 +465,8 @@ class LLMABBA:
                 report_to="wandb",
                 save_total_limit=1,
                 do_eval=True,
-                run_name=f"{run_name}-{datetime.now().strftime('%Y-%m-%d-%H-%M')}"
+                run_name=f"{run_name}-{datetime.now().strftime('%Y-%m-%d-%H-%M')}",
+                **{checkpointing_argument: True},
             ),
             data_collator=DataCollatorWithPadding(tokenizer=self.model_tokenizer),  # Changed
         )
@@ -449,6 +506,13 @@ class LLMABBA:
             data_scaled = self._scale_batch(values)
 
         sequences, _ = self.xabba.transform(data_scaled)
+        if task == "classification" and hasattr(self.xabba, "classification_label_tokens"):
+            outputs = []
+            for symbols in sequences:
+                prefix = self._classification_prompt_ids(prompt, ListToString(symbols), model_tokenizer)
+                outputs.extend(self._predict_classification_batch([prefix], ft_model, model_tokenizer))
+            return outputs[0] if len(outputs) == 1 else outputs
+
         options = {"repetition_penalty": llm_repetition_penalty, "do_sample": llm_temperature > 0}
         if llm_temperature > 0:
             options["temperature"] = llm_temperature

@@ -63,6 +63,7 @@ setup_args = {
         "pandas",
         "scikit-learn",
         "joblib>=1.1.1",
+        "packaging",
         "torch",
         "transformers",
         "bitsandbytes",
