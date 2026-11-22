@@ -1,0 +1,17 @@
+tf_keras
+wandb
+numpy>=1.20
+scipy>=0.7.0
+requests
+pandas
+scikit-learn
+joblib>=1.1.1
+packaging
+torch
+transformers
+bitsandbytes
+peft
+trl
+datasets
+accelerate
+matplotlib
